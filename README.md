@@ -1,46 +1,24 @@
-# patients-h5
+### 路由响应的映射
+路由路径	路由级别	组件功能
+/login	1	登录
+/	1	布局容器
+/user	②	个人中心
+/user/patient	1	家庭档案
+/user/address	1	地址管理
+/home	②	首页
+/consult/fast	1	快速问诊
+/consult/dep	1	选择科室
+/consult/illness	1	病情描述
+/consult/pay	1	问诊支付
+/room	1	问诊室
+/user/consult	1	我的问诊
+/user/consult/:id	1	问诊详情
+/order/pay	1	药品订单支付
+/order/pay/result	1	药品订单支付结果
+/order	1	药品订单列表
+/order/:id	1	药品订单详情
+/order/logistics/:id	1	药品订单物流
+/login/callback	1	QQ登录回跳
+/article	②	健康百科
+/notify	②	消息通知
 
-This template should help get you started developing with Vue 3 in Vite.
-
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
-
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
-
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
-
-1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-pnpm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-pnpm dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-pnpm build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-pnpm lint
-```
