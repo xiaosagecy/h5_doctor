@@ -1,16 +1,13 @@
 <template>
-  <p>{{ store.user }}</p>
-  <button @click="store.setUser({ id: '1', mobile: '1', account: '1', avatar: '1', token: '1' })">
-    登录
-  </button>
-  <button @click="store.delUser()">退出</button>
+  <div>
+    <van-button type="primary">按钮</van-button>
+  </div>
 </template>
 
 <script setup lang='ts'>
-import { useUserStore } from './stores'
-const store = useUserStore()
+import { Button as VanButton } from 'vant'
 </script>
 
-<style>
+<style scoped>
 
 </style>
