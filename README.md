@@ -22,3 +22,31 @@
 /article	②	健康百科
 /notify	②	消息通知
 
+### vant自动按需加载
+需要按照插件，再配置vite.config.ts
+```
+# 通过 npm 安装
+npm i unplugin-vue-components -D
+# 通过 yarn 安装
+yarn add unplugin-vue-components -D
+# 通过 pnpm 安装
+pnpm add unplugin-vue-components -D
+```
+`vite.config.ts`
+```js
+import Components from 'unplugin-vue-components/vite'
+import { VantResolver } from 'unplugin-vue-components/resolvers'
+
+plugins: [
+    // 解析单文件组件的插件
+    vue(),
+    // 自动导入的插件，解析器可以是 vant element and-vue
+    Components({
+      // 不开起自动生成声明文件 dts: false
+      dts: false,
+      // 原因：Toast Confirm 这类组件的样式还是需要单独引入，样式全局引入了，关闭自动引入
+      resolvers: [VantResolver({ importStyle: false })]
+    })
+  ],
+```
+
