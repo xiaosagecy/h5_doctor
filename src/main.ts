@@ -4,7 +4,7 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
 import pinia from './stores'
-import './assets/main.css'
+
 
 // import persist from 'pinia-plugin-persistedstate'
 
