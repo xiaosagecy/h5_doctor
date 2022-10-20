@@ -50,3 +50,13 @@ plugins: [
   ],
 ```
 
+### 怎么深层作用其他组件样式？
+> ::v-deep(){ // 样式 }
+
+### 项目中如何判断是否可以回退？
+> history.state?.back
+
+### 为什么可以不导入组件，反而直接使用组件呢？
+> 使用了 unplugin-vue-components 默认 src/compoenents 自动导入注册
+
+
