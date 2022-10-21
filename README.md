@@ -125,4 +125,4 @@ plugins: [
   - `:modelValue="count"` 和 `@update:modelValue="count=$event"`
 - vue3 中 v-model:xxx 语法糖
   - `:xxx="count"` 和 `@update:xxx="count=$event"`
-  - 其中$event就是子组件传给父组件的参数值
+  - 其中$event就是子组件传给父组件的参数值.

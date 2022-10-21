@@ -37,7 +37,6 @@ const loadList = async () => {
 }
 
 onMounted(() => {
-    console.log(list)
     loadList()
 })
 </script>
