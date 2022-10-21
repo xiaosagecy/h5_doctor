@@ -119,6 +119,8 @@ onUnmounted(() => {
 </script>
 
 <style scoped lang="scss">
+@import '@/styles/main.scss';
+
 .login {
     &-page {
         padding-top: 46px;
@@ -171,14 +173,14 @@ onUnmounted(() => {
 
         .van-checkbox {
             a {
-                color: var(--cp-primary);
+                color: #4187f2;
                 padding: 0 5px;
             }
         }
     }
 
     .btn-send {
-        color: var(--cp-primary);
+        color: #4187f2;
 
         &.active {
             color: rgba(22, 194, 163, 0.5);
