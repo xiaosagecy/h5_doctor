@@ -2,19 +2,19 @@
     <div class="patient-page">
         <cp-nav-bar title="家庭档案"></cp-nav-bar>
         <div class="patient-list">
-            <div class="patient-item" v-for="i in 2">
+            <div class="patient-item" v-for="item in list" :key="item.id">
                 <div class="info">
-                    <span class="name">潇洒哥</span>
-                    <span class="id">321***********6164</span>
-                    <span>男</span>
-                    <span>18岁</span>
+                    <span class="name">{{item.name}}</span>
+                    <span class="id">{{ item.idCard.replace(/^(.{6})(?:\d+)(.{4})$/, '\$1******\$2') }}</span>
+                    <span>{{item.genderValue}}</span>
+                    <span>{{item.age}}岁</span>
                 </div>
                 <div class="icon">
                     <cp-icon name="user-edit"></cp-icon>
                 </div>
-                <div class="tag">默认</div>
+                <div class="tag" v-if="item.defaultFlag === 1">默认</div>
             </div>
-            <div class="patient-add">
+            <div class="patient-add" v-if="list.length < 6">
                 <cp-icon name="user-add"></cp-icon>
                 <p>添加患者</p>
             </div>
@@ -24,7 +24,22 @@
 </template>
 
 <script setup lang='ts'>
+import { getPatientList } from '@/services/use'
+import type { Patient } from '@/types/user'
+import { ref, onMounted } from 'vue'
 
+// 页面初始化加载数据
+const list = ref<Patient[]>([])
+const loadList = async () => {
+    const res = await getPatientList()
+    // console.log(res)
+    list.value = res.data
+}
+
+onMounted(() => {
+    console.log(list)
+    loadList()
+})
 </script>
 
 <style lang="scss" scoped>
