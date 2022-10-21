@@ -76,6 +76,7 @@
                 </template>
             </van-cell>
         </div>
+        <a class="logout" href="javascript:;" @click="logout">退出登录</a>
     </div>
 </template>
 
@@ -83,6 +84,9 @@
 import { getUserInfo } from '@/services/use'
 import type { UserInfo } from '@/types/user'
 import { onMounted, ref } from 'vue'
+import { useUserStore } from '@/stores'
+import { useRouter } from 'vue-router'
+import { Dialog } from 'vant'
 
 // 获取用户信息且渲染
 const user = ref<UserInfo>()
@@ -101,6 +105,22 @@ const tools = [
     { label: '官方客服', path: '/' },
     { label: '设置', path: '/' },
 ]
+
+const store = useUserStore()
+const router = useRouter()
+// 退出登录
+const logout = async () => {
+    await Dialog.confirm({
+        title: '温馨提示',
+        message: '您确认要退出吗？',
+        cancelButtonText: '取消',
+        confirmButtonText: '确认'
+    })
+    // 点击确认才会执行下面代码
+    store.delUser()
+    router.push('/login')
+}
+
 </script>
 
 <style lang="scss" scoped>
@@ -219,6 +239,14 @@ $cp-bg: #f6f7f9;
             font-size: 17px;
             margin-right: 10px;
         }
+    }
+
+    .logout {
+        display: block;
+        margin: 20px auto;
+        width: 100px;
+        text-align: center;
+        color: #eb5757;
     }
 }
 </style>
