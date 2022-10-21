@@ -21,7 +21,7 @@
                 </template>
             </van-field>
             <!-- 验证码登录 -->
-            <van-field v-else placeholder="短信验证码" :rules="codeRules">
+            <van-field v-else v-model="code" placeholder="短信验证码" :rules="codeRules">
                 <template #button>
                     <span class="btn-send" @click="send">{{ time > 0 ? `${time}s后重新发送`:'发送验证码'}}</span>
                 </template>
@@ -58,7 +58,7 @@
 import { onUnmounted, ref } from 'vue'
 import { mobileRules, passwordRules, codeRules } from '@/utils/rules'
 import { Toast, type FormInstance } from 'vant'
-import { loginByPassword, sendMobileCode } from '@/services/use'
+import { loginByPassword, sendMobileCode, loginByMobile } from '@/services/use'
 import { useUserStore } from '@/stores'
 import { useRouter, useRoute } from 'vue-router'
 const agree = ref(false)
@@ -84,8 +84,10 @@ const form = ref<FormInstance>()
 // 提交表单
 const login = async () => {
     if (!agree.value) return Toast('请勾选我已同意')
-    // 校验完毕，进行登录
-    const res = await loginByPassword(mobile.value, password.value)
+    // 校验完毕，进行登录 判断是用密码登录还是验证码登陆
+    const res = isPass.value
+        ? await loginByPassword(mobile.value, password.value)
+        : await loginByMobile(mobile.value, code.value)
     store.setUser(res.data)
     // 如果有回调地址就进行回跳，没有则跳转到个人中心
     router.push((route.query.returnUrl as string) || '/user')
