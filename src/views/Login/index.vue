@@ -12,7 +12,11 @@
         <!-- form 表单 -->
         <van-form autocomplete="off">
             <van-field placeholder="请输入手机号" type="tel"></van-field>
-            <van-field placeholder="请输入密码" type="password"></van-field>
+            <van-field placeholder="请输入密码" :type="show ? 'text':'password'">
+                <template #button>
+                    <cp-icon @click="show = !show" :name="`login-eye-${show ? 'on' : 'off'}`"></cp-icon>
+                </template>
+            </van-field>
             <div class="cp-cell">
                 <van-checkbox v-model="agree">
                     <span>我已同意</span>
@@ -42,6 +46,12 @@
 <script setup lang='ts'>
 import { ref } from 'vue'
 const agree = ref(false)
+
+// 表单数据
+const mobile = ref('')
+const password = ref('')
+// 控制密码是否显示
+const show = ref(false)
 </script>
 
 <style scoped lang="scss">

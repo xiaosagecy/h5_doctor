@@ -4,7 +4,8 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
 import pinia from './stores'
-
+// 导入svg插件
+import 'virtual:svg-icons-register'
 
 // import persist from 'pinia-plugin-persistedstate'
 
