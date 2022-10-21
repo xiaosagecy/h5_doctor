@@ -10,4 +10,9 @@ const passwordRules = [
     { pattern: /^\w{8,24}$/, message: '密码需要8-24个字符' }
 ]
 
-export { mobileRules, passwordRules }
+const codeRules = [
+    { request: true, message: '请输入验证码' },
+    { pattern: /^\d{6}$/, message: '输入6位验证码' }
+]
+
+export { mobileRules, passwordRules, codeRules }

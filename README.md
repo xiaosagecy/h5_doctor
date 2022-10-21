@@ -59,5 +59,6 @@ plugins: [
 ### 为什么可以不导入组件，反而直接使用组件呢？
 > 使用了 unplugin-vue-components 默认 src/compoenents 自动导入注册
 
-
+### 怎么给整个表单加校验？
+> 按钮组件设置 native-type="submit"，表单组件绑定 @submit 事件
 
