@@ -62,3 +62,27 @@ plugins: [
 ### 怎么给整个表单加校验？
 > 按钮组件设置 native-type="submit"，表单组件绑定 @submit 事件
 
+### TS两个内置类型 Pick与Omit
+```ts
+  type Person = {
+    name: string
+    age: number
+  }
+  //Pick:从Person类型中选出age属性
+  type PickPerson = Pick<Person, 'age'>
+  // PickPerson === { age: string }
+
+  let obj:PickPerson = {
+    age:11
+  }
+  
+  // Omit:从Person类型中剔除age属性
+  type OmitPerson = Omit<Person, 'age'>
+
+  let obj2:OmitPerson = {
+    name: 'zhangsan'
+  }
+```
+>Pick作用：从类型对象中取出指定的属性类型
+>Omit作用：从类型对象中排除掉指定的属性类型，得到剩下的
+
