@@ -1,6 +1,7 @@
 <template>
     <!-- left-arrow显示左侧箭头 -->
-    <van-nav-bar left-arrow @click-left="onClickLeft" fixed title="注册" right-text="注册" @click-right="onClickRight">
+    <van-nav-bar left-arrow @click-left="onClickLeft" fixed :title="title" :right-text="rightText"
+        @click-right="onClickRight">
     </van-nav-bar>
 </template>
 

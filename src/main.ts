@@ -1,5 +1,5 @@
 import { createApp } from 'vue'
-import { createPinia } from 'pinia'
+// import { createPinia } from 'pinia'
 
 import App from './App.vue'
 import router from './router'
@@ -11,6 +11,7 @@ import 'virtual:svg-icons-register'
 
 // vant 全局样式使用
 import 'vant/lib/index.css'
+import './styles/main.scss'
 const app = createApp(App)
 
 // const pinia = createPinia()

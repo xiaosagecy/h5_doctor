@@ -99,7 +99,7 @@ onMounted(async () => {
 const tools = [
     { label: '我的问诊', path: '/user/consult' },
     { label: '我的处方', path: '/' },
-    { label: '家庭档案', path: '/user/patient' },
+    { label: '家庭档案', path: '/user/patients' },
     { label: '地址管理', path: '/user/address' },
     { label: '我的评价', path: '/' },
     { label: '官方客服', path: '/' },
@@ -124,11 +124,8 @@ const logout = async () => {
 </script>
 
 <style lang="scss" scoped>
-@import '@/styles/main.scss';
-$cp-bg: #f6f7f9;
-
 .user-page {
-    background-color: $cp-bg;
+    background-color: var(--cp-bg);
     min-height: calc(100vh - 50px);
     padding: 0 15px 65px;
 
@@ -246,7 +243,7 @@ $cp-bg: #f6f7f9;
         margin: 20px auto;
         width: 100px;
         text-align: center;
-        color: #eb5757;
+        color: var(--cp-price);
     }
 }
 </style>

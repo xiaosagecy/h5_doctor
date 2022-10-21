@@ -119,8 +119,6 @@ onUnmounted(() => {
 </script>
 
 <style scoped lang="scss">
-@import '@/styles/main.scss';
-
 .login {
     &-page {
         padding-top: 46px;
