@@ -47,18 +47,31 @@
 <script setup lang='ts'>
 import { ref } from 'vue'
 import { mobileRules, passwordRules } from '@/utils/rules'
-import { Toast } from 'vant';
+import { Toast } from 'vant'
+import { loginByPassword } from '@/services/use'
+import { useUserStore } from '@/stores'
+import { useRouter, useRoute } from 'vue-router'
 const agree = ref(false)
 
 // 表单数据
-const mobile = ref('')
-const password = ref('')
+const mobile = ref('13230000001')
+const password = ref('abc12345')
 // 控制密码是否显示
 const show = ref(false)
 
+const store = useUserStore()
+const router = useRouter()
+const route = useRoute()
+
 // 提交表单
-const login = () => {
+const login = async () => {
     if (!agree.value) return Toast('请勾选我已同意')
+    // 校验完毕，进行登录
+    const res = await loginByPassword(mobile.value, password.value)
+    store.setUser(res.data)
+    // 如果有回调地址就进行回跳，没有则跳转到个人中心
+    router.push((route.query.returnUrl as string) || '/user')
+    Toast.success('登陆成功')
 }
 </script>
 
