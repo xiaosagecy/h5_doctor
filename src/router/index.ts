@@ -10,10 +10,10 @@ const router = createRouter({
       path: '/',
       component: () => import('@/views/Layout/index.vue'),
       children: [
-        { path: '/home', component: () => import('@/views/Home/index.vue') },
-        { path: '/article', component: () => import('@/views/Article/index.vue') },
-        { path: '/notify', component: () => import('@/views/Notify/index.vue') },
-        { path: '/user', component: () => import('@/views/User/index.vue') }
+        { path: '/home', component: () => import('@/views/Home/index.vue'), meta: { title: '首页' } },
+        { path: '/article', component: () => import('@/views/Article/index.vue'), meta: { title: '健康百科' } },
+        { path: '/notify', component: () => import('@/views/Notify/index.vue'), meta: { title: '消息通知' } },
+        { path: '/user', component: () => import('@/views/User/index.vue'), meta: { title: '个人中心' } }
 
       ]
     }
@@ -22,6 +22,8 @@ const router = createRouter({
 
 // 访问权限控制
 router.beforeEach((to) => {
+  // 处理标题
+  document.title = `${to.meta.title || ''}`
   // 用户仓库
   const store = useUserStore()
   // 不需要登录的页面，白名单
