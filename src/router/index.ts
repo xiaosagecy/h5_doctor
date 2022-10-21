@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useUserStore } from '@/stores'
 
 const router = createRouter({
   // import.meta.env.BASE_URL是vite配置的路由基准地址，默认是'/'
@@ -17,6 +18,16 @@ const router = createRouter({
       ]
     }
   ]
+})
+
+// 访问权限控制
+router.beforeEach((to) => {
+  // 用户仓库
+  const store = useUserStore()
+  // 不需要登录的页面，白名单
+  const whileList = ['/login', 'register']
+  // 如果没有登录而且不在白名单内，就要去登录
+  if (!store.user?.token && !whileList.includes(to.path)) return '/login'
 })
 
 export default router
