@@ -6,7 +6,7 @@
 
 <script setup lang='ts'>
 // 提供name属性
-defineExpose<{
+defineProps<{
     name: string
 }>()
 </script>

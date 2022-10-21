@@ -10,9 +10,9 @@
             </a>
         </div>
         <!-- form 表单 -->
-        <van-form autocomplete="off">
-            <van-field placeholder="请输入手机号" type="tel"></van-field>
-            <van-field placeholder="请输入密码" :type="show ? 'text':'password'">
+        <van-form autocomplete="off" @submit="login">
+            <van-field v-model="mobile" :rules="mobileRules" placeholder="请输入手机号" type="tel"></van-field>
+            <van-field v-model="password" :rules="passwordRules" placeholder="请输入密码" :type="show ? 'text':'password'">
                 <template #button>
                     <cp-icon @click="show = !show" :name="`login-eye-${show ? 'on' : 'off'}`"></cp-icon>
                 </template>
@@ -26,7 +26,8 @@
                 </van-checkbox>
             </div>
             <div class="cp-cell">
-                <van-button block round type="primary">登 录</van-button>
+                <!-- 把button设置为原生submit类型按键 -->
+                <van-button block round type="primary" native-type="submit">登 录</van-button>
             </div>
             <div class="cp-cell">
                 <a href="javascript:;">忘记密码？</a>
@@ -45,6 +46,8 @@
 
 <script setup lang='ts'>
 import { ref } from 'vue'
+import { mobileRules, passwordRules } from '@/utils/rules'
+import { Toast } from 'vant';
 const agree = ref(false)
 
 // 表单数据
@@ -52,6 +55,11 @@ const mobile = ref('')
 const password = ref('')
 // 控制密码是否显示
 const show = ref(false)
+
+// 提交表单
+const login = () => {
+    if (!agree.value) return Toast('请勾选我已同意')
+}
 </script>
 
 <style scoped lang="scss">
