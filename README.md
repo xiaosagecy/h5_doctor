@@ -102,3 +102,27 @@ plugins: [
 - 匹配第二个$2 `(.{4})$`
 
 说明：身份证前6位和后4位显示，其余用*代替
+
+
+
+### 回顾Vue3 v-model语法糖
+
+```vue
+<com-a v-model="count"></com-a>
+<!-- 等价 -->
+<com-a :modelValue="count" @update:modelValue="count=$event"></com-a>
+```
+
+```vue
+<com-a v-model:msg="str"></com-a>
+<!-- 等价 -->
+<com-a :msg="str" @update:msg="str=$event"></com-a>
+```
+
+- vue3中只需要 `v-model` 指令可以支持对个数据在父子组件同步，不再支持 `.sync` 语法。
+
+- vue3 中 v-model 语法糖
+  - `:modelValue="count"` 和 `@update:modelValue="count=$event"`
+- vue3 中 v-model:xxx 语法糖
+  - `:xxx="count"` 和 `@update:xxx="count=$event"`
+  - 其中$event就是子组件传给父组件的参数值
