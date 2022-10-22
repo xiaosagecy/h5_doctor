@@ -126,3 +126,9 @@ plugins: [
 - vue3 中 v-model:xxx 语法糖
   - `:xxx="count"` 和 `@update:xxx="count=$event"`
   - 其中$event就是子组件传给父组件的参数值.
+
+
+  ### linear-gradient()
+  函数用于创建一个表示两种或多种颜色线性渐变的图片
+  渐变轴为180度
+  background: linear-gradient(180deg,rgba(62,206,197,0.85),#26bcc6);
