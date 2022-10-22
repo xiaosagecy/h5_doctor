@@ -37,7 +37,7 @@
                 </van-field>
                 <van-field label="默认就诊人">
                     <template #input>
-                        <van-checkbox v-model="patient.defaultFlag" round />
+                        <van-checkbox v-model="defaultFlag" round />
                     </template>
                 </van-field>
             </van-form>
@@ -47,7 +47,7 @@
 </template>
 
 <script setup lang='ts'>
-import { getPatientList } from '@/services/use'
+import { getPatientList, addPatient } from '@/services/use'
 import type { Patient } from '@/types/user'
 import { ref, onMounted, computed } from 'vue'
 import { Toast } from 'vant'
@@ -102,13 +102,19 @@ const showPopup = () => {
     show.value = true
 }
 
-const submit = () => {
+const submit = async () => {
     if (!patient.value.name) return Toast('请输入真实姓名')
     if (!patient.value.idCard) return Toast('请输入身份证号')
     const validate = new Validator()
     if (!validate.isValid(patient.value.idCard)) return Toast('身份证格式有误')
     const { sex } = validate.getInfo(patient.value.idCard)
     if (patient.value.gender !== sex) return Toast('性别与身份证不符')
+    // 以上的校验均通过开始添加患者信息
+    await addPatient(patient.value)
+    show.value = false
+    // 重新获取患者信息列表
+    loadList()
+    Toast.success('添加成功')
 }
 
 </script>
