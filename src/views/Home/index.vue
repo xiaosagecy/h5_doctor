@@ -63,17 +63,35 @@
         </div>
         <!-- 轮播图 -->
         <div class="home-banner">
+            <!-- indicator-color指示器颜色 则是轮播图下的小圆点颜色-->
             <van-swipe indicator-color="#fff">
                 <van-swipe-item v-for="i in 4">
                     <img src="@/assets/ad.png" alt="">
                 </van-swipe-item>
             </van-swipe>
         </div>
+        <!-- 切换知识列表区域 -->
+        <van-tabs shrink sticky v-model:active="active">
+            <van-tab title="关注">
+                <knowledge-list />
+            </van-tab>
+            <van-tab title="推荐">
+                <knowledge-list />
+            </van-tab>
+            <van-tab title="减脂">
+                <knowledge-list />
+            </van-tab>
+            <van-tab title="饮食">
+                <knowledge-list />
+            </van-tab>
+        </van-tabs>
     </div>
 </template>
 
 <script setup lang='ts'>
-
+import { ref } from 'vue'
+import KnowledgeList from './components/KnowledgeList.vue'
+const active = ref(0)
 </script>
 
 <style scoped lang="scss">
