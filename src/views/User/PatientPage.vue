@@ -9,12 +9,12 @@
                     <span>{{item.genderValue}}</span>
                     <span>{{item.age}}岁</span>
                 </div>
-                <div class="icon">
+                <div class="icon" @click="showPopup(item)">
                     <cp-icon name="user-edit"></cp-icon>
                 </div>
                 <div class="tag" v-if="item.defaultFlag === 1">默认</div>
             </div>
-            <div class="patient-add" v-if="list.length < 6" @click="showPopup">
+            <div class="patient-add" v-if="list.length < 6" @click="showPopup()">
                 <cp-icon name="user-add"></cp-icon>
                 <p>添加患者</p>
             </div>
@@ -24,7 +24,8 @@
         <!-- 右侧边栏：用于点击添加患者档案信息从右侧滑动弹出表单 -->
         <!-- :show="show" @update:show="show=$event"也可以改为v-model -->
         <van-popup :show="show" @update:show="show=$event" position="right">
-            <cp-nav-bar :back="() => (show = false)" title="添加患者" right-text="保存" @click-right="submit"></cp-nav-bar>
+            <cp-nav-bar :back="() => (show = false)" :title="patient.id ? '编辑患者 ':'添加患者'" right-text="保存"
+                @click-right="submit"></cp-nav-bar>
             <!-- 添加患者档案表单 -->
             <van-form autocomplete="off">
                 <van-field v-model="patient.name" label="真实姓名" placeholder="请输入真实姓名" />
@@ -47,7 +48,7 @@
 </template>
 
 <script setup lang='ts'>
-import { getPatientList, addPatient } from '@/services/use'
+import { getPatientList, addPatient, editPatient } from '@/services/use'
 import type { Patient } from '@/types/user'
 import { ref, onMounted, computed } from 'vue'
 import { Toast } from 'vant'
@@ -96,9 +97,17 @@ const gender = ref(1)
 
 // 打开侧滑栏
 const show = ref(false)
-const showPopup = () => {
-    // 重置表单
-    patient.value = { ...initPatient }
+const showPopup = (item?: Patient) => {
+    if (item) {
+        // item为真则为传参数了，则为修改信息
+        const { id, gender, name, idCard, defaultFlag } = item
+        // 点击修改图标后，信息回显
+        patient.value = { id, gender, name, idCard, defaultFlag }
+    } else {
+        // 添加患者信息
+        // 重置表单
+        patient.value = { ...initPatient }
+    }
     show.value = true
 }
 
@@ -109,12 +118,14 @@ const submit = async () => {
     if (!validate.isValid(patient.value.idCard)) return Toast('身份证格式有误')
     const { sex } = validate.getInfo(patient.value.idCard)
     if (patient.value.gender !== sex) return Toast('性别与身份证不符')
-    // 以上的校验均通过开始添加患者信息
-    await addPatient(patient.value)
+    // 以上的校验均通过开始添加/修改患者信息
+    // 如果有patient.value.id则为修改，因为修改需要传id，否则为添加
+    patient.value.id ? await editPatient(patient.value) :
+        await addPatient(patient.value)
     show.value = false
     // 重新获取患者信息列表
     loadList()
-    Toast.success('添加成功')
+    Toast.success(patient.value.id ? '编辑成功' : '添加成功')
 }
 
 </script>
