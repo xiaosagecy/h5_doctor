@@ -20,6 +20,7 @@
             </div>
             <div class="patient-tip">最多可添加 6 人</div>
         </div>
+        <cp-radio-btn :options="options" v-model="gender" @update:modelValue="gender = $event"></cp-radio-btn>
     </div>
 </template>
 
@@ -39,6 +40,16 @@ const loadList = async () => {
 onMounted(() => {
     loadList()
 })
+
+// 复选框内容
+const options = [
+    { label: '男', value: 1 },
+    { label: '女', value: 0 }
+]
+
+// 1默认为男性
+const gender = ref(1)
+
 </script>
 
 <style lang="scss" scoped>
