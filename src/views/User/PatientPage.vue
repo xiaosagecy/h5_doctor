@@ -24,7 +24,23 @@
         <!-- 右侧边栏：用于点击添加患者档案信息从右侧滑动弹出表单 -->
         <!-- :show="show" @update:show="show=$event"也可以改为v-model -->
         <van-popup :show="show" @update:show="show=$event" position="right">
-            <cp-nav-bar :back="() => (show = false)" title="添加患者" right-text="保存"></cp-nav-bar>
+            <cp-nav-bar :back="() => (show = false)" title="添加患者" right-text="保存" @click-right="submit"></cp-nav-bar>
+            <!-- 添加患者档案表单 -->
+            <van-form autocomplete="off">
+                <van-field v-model="patient.name" label="真实姓名" placeholder="请输入真实姓名" />
+                <van-field v-model="patient.idCard" label="身份证号" placeholder="请输入身份证号" />
+                <van-field label="性别">
+                    <!-- 封装的单选框 -->
+                    <template #input>
+                        <cp-radio-btn v-model="patient.gender" :options="options"></cp-radio-btn>
+                    </template>
+                </van-field>
+                <van-field label="默认就诊人">
+                    <template #input>
+                        <van-checkbox v-model="patient.defaultFlag" round />
+                    </template>
+                </van-field>
+            </van-form>
         </van-popup>
 
     </div>
@@ -33,7 +49,9 @@
 <script setup lang='ts'>
 import { getPatientList } from '@/services/use'
 import type { Patient } from '@/types/user'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
+import { Toast } from 'vant'
+import Validator from 'id-validator'
 
 // 页面初始化加载数据
 const list = ref<Patient[]>([])
@@ -45,6 +63,26 @@ const loadList = async () => {
 
 onMounted(() => {
     loadList()
+})
+
+// 添加患者档案信息
+const initPatient: Patient = {
+    name: '',
+    idCard: '',
+    gender: 1, // 默认男
+    defaultFlag: 0 // 默认就诊人 0不默认
+}
+
+const patient = ref<Patient>({ ...initPatient })
+
+// 默认值需要转换
+const defaultFlag = computed({
+    get() {
+        return patient.value.defaultFlag === 1 ? true : false
+    },
+    set(value) {
+        patient.value.defaultFlag = value ? 1 : 0
+    }
 })
 
 // 复选框内容
@@ -59,7 +97,18 @@ const gender = ref(1)
 // 打开侧滑栏
 const show = ref(false)
 const showPopup = () => {
+    // 重置表单
+    patient.value = { ...initPatient }
     show.value = true
+}
+
+const submit = () => {
+    if (!patient.value.name) return Toast('请输入真实姓名')
+    if (!patient.value.idCard) return Toast('请输入身份证号')
+    const validate = new Validator()
+    if (!validate.isValid(patient.value.idCard)) return Toast('身份证格式有误')
+    const { sex } = validate.getInfo(patient.value.idCard)
+    if (patient.value.gender !== sex) return Toast('性别与身份证不符')
 }
 
 </script>
