@@ -42,16 +42,18 @@
                     </template>
                 </van-field>
             </van-form>
+            <van-action-bar v-if="patient.id">
+                <van-action-bar-button @click="remove">删除</van-action-bar-button>
+            </van-action-bar>
         </van-popup>
-
     </div>
 </template>
 
 <script setup lang='ts'>
-import { getPatientList, addPatient, editPatient } from '@/services/use'
+import { getPatientList, addPatient, editPatient, delPatient } from '@/services/use'
 import type { Patient } from '@/types/user'
 import { ref, onMounted, computed } from 'vue'
-import { Toast } from 'vant'
+import { Toast, Dialog } from 'vant'
 import Validator from 'id-validator'
 
 // 页面初始化加载数据
@@ -128,11 +130,37 @@ const submit = async () => {
     Toast.success(patient.value.id ? '编辑成功' : '添加成功')
 }
 
+// 删除
+const remove = async () => {
+    if (patient.value.id) {
+        await Dialog.confirm({
+            title: '温馨提示',
+            message: `您确认要删除 ${patient.value.name} 患者信息吗 ？`,
+            cancelButtonText: '取消',
+            confirmButtonText: '确认'
+        })
+        await delPatient(patient.value.id)
+        show.value = false
+        loadList()
+        Toast.success('删除成功')
+    }
+}
 </script>
 
 <style lang="scss" scoped>
 .patient-page {
     padding: 46px 0 80px;
+
+    // 底部操作栏
+    .van-action-bar {
+        padding: 0 10px;
+        margin-bottom: 10px;
+
+        .van-button {
+            color: var(--cp-price);
+            background-color: var(--cp-bg);
+        }
+    }
 
     ::v-deep() {
         .van-popup {

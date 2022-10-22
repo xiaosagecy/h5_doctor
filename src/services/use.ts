@@ -25,3 +25,7 @@ export const addPatient = (patient: Patient) => request('/patient/add', 'post', 
 // 编辑患者档案信息
 export const editPatient = (patient: Patient) => request('patient/update', 'put', patient)
 
+
+// 删除患者信息
+export const delPatient = (id: string) => request(`/patient/del/${id}`, 'DELETE')
+
