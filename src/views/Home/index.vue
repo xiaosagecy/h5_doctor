@@ -1,5 +1,6 @@
 <template>
     <div class="home-page">
+        <!-- 头部 -->
         <div class="home-header">
             <div class="con">
                 <h1>好医生</h1>
@@ -8,6 +9,7 @@
                 </div>
             </div>
         </div>
+        <!-- 导航 -->
         <div class="home-navs">
             <van-row>
                 <van-col span="8">
@@ -58,6 +60,14 @@
                     </router-link>
                 </van-col>
             </van-row>
+        </div>
+        <!-- 轮播图 -->
+        <div class="home-banner">
+            <van-swipe indicator-color="#fff">
+                <van-swipe-item v-for="i in 4">
+                    <img src="@/assets/ad.png" alt="">
+                </van-swipe-item>
+            </van-swipe>
         </div>
     </div>
 </template>
@@ -157,6 +167,16 @@
                 font-weight: normal;
             }
         }
+    }
+}
+
+.home-banner {
+    padding: 10px 15px;
+    height: 100px;
+
+    img {
+        width: 100%;
+        height: 100%;
     }
 }
 </style>
