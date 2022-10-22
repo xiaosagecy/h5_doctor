@@ -9,9 +9,10 @@
 import { useRouter } from 'vue-router'
 
 // 使用组件时才能确定的功能：标题、右侧文字、点击右侧文字行为（props传入）
-defineProps<{
+const props = defineProps<{
     title?: string
     rightText?: string
+    back?: () => void
 }>()
 
 const emit = defineEmits<{
@@ -19,7 +20,14 @@ const emit = defineEmits<{
 }>()
 
 const router = useRouter()
+
 const onClickLeft = () => {
+    // 在添加患者档案中 如果props中有属性back 
+    // 在点击返回 < 符合时 调用back函数 
+    // 把show的值赋值给false 使popup按下返回<箭头时隐藏
+    if (props.back) {
+        return props.back()
+    }
     // 判断历史记录中是否有回退
     if (history.state?.back) {
         router.back()
@@ -27,6 +35,7 @@ const onClickLeft = () => {
         router.push('/')
     }
 }
+
 const onClickRight = () => {
     emit('click-right')
 }

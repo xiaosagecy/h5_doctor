@@ -14,13 +14,19 @@
                 </div>
                 <div class="tag" v-if="item.defaultFlag === 1">默认</div>
             </div>
-            <div class="patient-add" v-if="list.length < 6">
+            <div class="patient-add" v-if="list.length < 6" @click="showPopup">
                 <cp-icon name="user-add"></cp-icon>
                 <p>添加患者</p>
             </div>
             <div class="patient-tip">最多可添加 6 人</div>
         </div>
-        <cp-radio-btn :options="options" v-model="gender" @update:modelValue="gender = $event"></cp-radio-btn>
+        <!-- 弹出层 -->
+        <!-- 右侧边栏：用于点击添加患者档案信息从右侧滑动弹出表单 -->
+        <!-- :show="show" @update:show="show=$event"也可以改为v-model -->
+        <van-popup :show="show" @update:show="show=$event" position="right">
+            <cp-nav-bar :back="() => (show = false)" title="添加患者" right-text="保存"></cp-nav-bar>
+        </van-popup>
+
     </div>
 </template>
 
@@ -50,11 +56,26 @@ const options = [
 // 1默认为男性
 const gender = ref(1)
 
+// 打开侧滑栏
+const show = ref(false)
+const showPopup = () => {
+    show.value = true
+}
+
 </script>
 
 <style lang="scss" scoped>
 .patient-page {
     padding: 46px 0 80px;
+
+    ::v-deep() {
+        .van-popup {
+            width: 100%;
+            height: 100%;
+            padding-top: 46px;
+            box-sizing: border-box;
+        }
+    }
 }
 
 .patient-list {
