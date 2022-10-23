@@ -71,6 +71,7 @@
             </van-swipe>
         </div>
         <!-- 切换知识列表区域 -->
+        <!-- shrink是否开启左侧收缩布局 sticky是否使用粘性布局 -->
         <van-tabs shrink sticky v-model:active="active">
             <van-tab title="关注">
                 <knowledge-list />
@@ -91,7 +92,8 @@
 <script setup lang='ts'>
 import { ref } from 'vue'
 import KnowledgeList from './components/KnowledgeList.vue'
-const active = ref(0)
+import type { KnowledgeType } from '@/types/consult'
+const active = ref<KnowledgeType>('recommend')
 </script>
 
 <style scoped lang="scss">
