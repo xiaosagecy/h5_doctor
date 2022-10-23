@@ -73,16 +73,16 @@
         <!-- 切换知识列表区域 -->
         <!-- shrink是否开启左侧收缩布局 sticky是否使用粘性布局 -->
         <van-tabs shrink sticky v-model:active="active">
-            <van-tab title="关注">
+            <van-tab title="关注" name="like">
                 <knowledge-list />
             </van-tab>
-            <van-tab title="推荐">
+            <van-tab title="推荐" name="recommend">
                 <knowledge-list />
             </van-tab>
-            <van-tab title="减脂">
+            <van-tab title="减脂" name="fatReduction">
                 <knowledge-list />
             </van-tab>
-            <van-tab title="饮食">
+            <van-tab title="饮食" name="food">
                 <knowledge-list />
             </van-tab>
         </van-tabs>
