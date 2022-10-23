@@ -74,16 +74,16 @@
         <!-- shrink是否开启左侧收缩布局 sticky是否使用粘性布局 -->
         <van-tabs shrink sticky v-model:active="active">
             <van-tab title="关注" name="like">
-                <knowledge-list />
+                <knowledge-list type="like" />
             </van-tab>
             <van-tab title="推荐" name="recommend">
-                <knowledge-list />
+                <knowledge-list type="recommend" />
             </van-tab>
             <van-tab title="减脂" name="fatReduction">
-                <knowledge-list />
+                <knowledge-list type="fatReduction" />
             </van-tab>
             <van-tab title="饮食" name="food">
-                <knowledge-list />
+                <knowledge-list type="food" />
             </van-tab>
         </van-tabs>
     </div>
