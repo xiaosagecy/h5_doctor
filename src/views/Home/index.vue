@@ -74,6 +74,9 @@
         <!-- shrink是否开启左侧收缩布局 sticky是否使用粘性布局 -->
         <van-tabs shrink sticky v-model:active="active">
             <van-tab title="关注" name="like">
+                <!-- 推荐你关注的医生 -->
+                <follow-doctor></follow-doctor>
+                <!-- 关注的医生写的问诊 -->
                 <knowledge-list type="like" />
             </van-tab>
             <van-tab title="推荐" name="recommend">
@@ -93,6 +96,8 @@
 import { ref } from 'vue'
 import KnowledgeList from './components/KnowledgeList.vue'
 import type { KnowledgeType } from '@/types/consult'
+import FollowDoctor from './components/FollowDoctor.vue'
+
 const active = ref<KnowledgeType>('recommend')
 </script>
 
