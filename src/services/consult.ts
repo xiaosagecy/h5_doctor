@@ -1,4 +1,4 @@
-import type { KnowledgePage, KnowledgeParams, DoctorPage, PageParams } from '@/types/consult'
+import type { KnowledgePage, KnowledgeParams, DoctorPage, PageParams, FollowType } from '@/types/consult'
 import { request } from '@/utils/request'
 
 
@@ -11,5 +11,9 @@ export const getKonwledgePage = (params: KnowledgeParams) =>
 export const getDoctorPage = (params: PageParams) =>
     request<DoctorPage>('/home/page/doc', 'get', params)
 
+
+// 关注医生/取消关注
+export const followDoctor = (id: string, type: FollowType = 'doc') =>
+    request('/like', 'post', { id, type })
 
 

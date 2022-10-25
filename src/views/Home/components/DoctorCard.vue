@@ -5,16 +5,33 @@
         <p class="name">{{ item.name }}</p>
         <p class="van-ellipsis">{{ item.hospitalName }}</p>
         <p>{{ item.positionalTitles }}</p>
-        <van-button round size="small" type="primary">
-            {{ item.likeFlag === 1 ? '已关注': '+ 关注'}}
+        <van-button round size="small" type="primary" @click="follow(item)" :loading="loading">
+            {{ item.likeFlag === 1 ? '已关注' : '+ 关注' }}
         </van-button>
     </div>
 </template>
 
 <script setup lang="ts">
 import type { Doctor } from '@/types/consult'
+import { followDoctor } from '@/services/consult'
+import { ref } from 'vue'
 
 defineProps<{ item: Doctor }>()
+
+// 关注部分
+const loading = ref(false)
+const follow = async (doctor: Doctor) => {
+    loading.value = true
+    try {
+        // console.log(doctor.id)
+        // console.log(doctor.likeFlag)
+        await followDoctor(doctor.id)
+        // 关注后把文字显示已关注
+        doctor.likeFlag = doctor.likeFlag === 1 ? 0 : 1
+    } finally {
+        loading.value = false
+    }
+}
 </script>
 
 <style scoped lang="scss">
