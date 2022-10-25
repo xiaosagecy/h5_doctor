@@ -140,5 +140,53 @@ plugins: [
 ```
 如果遇见一些常见的需求可以先看看 @vueuse/core 是否提供，这样可以提高开发效率。
 如果：窗口尺寸，滚动距离，是否进入可视区，倒计时，...等等。
+```
 
+### 逻辑复用-封装hooks函数
+原来对医生的关注/取消，因为多个组件需要使用，所以抽离封装复用,需要用到的变量`loading`和`follow`函数
+```vue
+<van-button :loading="loading" @click="follow(item)" round size="small" type="primary">
+  {{ item.likeFlag === 1 ? '已关注' : '+ 关注' }}
+</van-button>
+```
+```ts
+const loading = ref(false)
+const follow = async (doc: Doctor) => {
+  loading.value = true
+  try {
+    await followDoctor(doc.id)
+    doc.likeFlag = doc.likeFlag === 1 ? 0 : 1
+  } finally {
+    loading.value = false
+  }
+}
+```
+抽离封装，需要return出需要的变量`loading`和`follow`函数，通用命名为`useXXX`
+```ts
+// 需要响应式
+import { ref } from 'vue'
+// 需要发送请求
+import { followDoctor } from '@/service/consult'
+// 需要的参数类型
+import type { FollowType } from '@/types/consult'
+
+export const useFollow = async (type:FollowType = 'doc') => {
+  // 各种件需要的loading
+  const loading = ref(false)
+  // 各组件需要的函数,需要传一个参数 参数类型为对象，需要里面的两个属性
+  const follow = async (obj:{id:stirng,likeFlag: 0 | 1 }) {
+    // 开启加载图标
+    loading.value = true
+    try {
+      // 发请求
+      await followDoctor(obj.id,type)
+      // 改变关注/已关注 显示
+      obj.likeFlag = obj.likeFlag === 1 ? 0 : 1
+    } finally {
+      loading.value = false
+    }
+  }
+  // 返回各组件需要的变量和函数
+  return { loading, follow }
+}
 ```

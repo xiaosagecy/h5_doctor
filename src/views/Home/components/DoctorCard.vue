@@ -13,25 +13,14 @@
 
 <script setup lang="ts">
 import type { Doctor } from '@/types/consult'
-import { followDoctor } from '@/services/consult'
-import { ref } from 'vue'
+import { useFollow } from '@/composable/index'
+
 
 defineProps<{ item: Doctor }>()
 
 // 关注部分
-const loading = ref(false)
-const follow = async (doctor: Doctor) => {
-    loading.value = true
-    try {
-        // console.log(doctor.id)
-        // console.log(doctor.likeFlag)
-        await followDoctor(doctor.id)
-        // 关注后把文字显示已关注
-        doctor.likeFlag = doctor.likeFlag === 1 ? 0 : 1
-    } finally {
-        loading.value = false
-    }
-}
+const { loading, follow } = useFollow()
+
 </script>
 
 <style scoped lang="scss">
