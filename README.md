@@ -190,3 +190,41 @@ export const useFollow = async (type:FollowType = 'doc') => {
   return { loading, follow }
 }
 ```
+
+### 改善路由懒加载的体验
+```
+由于全部路由都适用了路由懒加载，切换路由的时候都需要加载资源，网络不好的时候会“静止”，为了有更好的用户体验，加上进度条
+```
+1.插件安装
+```bash
+pnpm add nprogress
+pnpm add @types/nprogress -D
+```
+`src/router/index.ts`
+```ts
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
+
+NProgress.configure({
+  showSpinner: false
+})
+```
+`切换路由前开启`
+```ts
+router.beforeEach((to) => {
++  NProgress.start()
+```
+`路由切换完毕后关闭`
+```ts
+router.afterEach((to) => {
+  // 修改标题
+  document.title = `好医生-${to.meta.title || ''}`
+  NProgress.done()
+})
+```
+`src/styles/main.scss`
+```scss
+#nprogress .bar {
+  background-color: var(--cp-primary) !important;
+}
+```

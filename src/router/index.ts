@@ -1,5 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useUserStore } from '@/stores'
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
+
+// 插件配置，颜色修改
+NProgress.configure({
+  showSpinner: false
+})
+
 
 const router = createRouter({
   // import.meta.env.BASE_URL是vite配置的路由基准地址，默认是'/'
@@ -23,6 +31,7 @@ const router = createRouter({
 
 // 访问权限控制
 router.beforeEach((to) => {
+  NProgress.start()
   // 处理标题
   document.title = `${to.meta.title || ''}`
   // 用户仓库
@@ -31,6 +40,12 @@ router.beforeEach((to) => {
   const whileList = ['/login', 'register']
   // 如果没有登录而且不在白名单内，就要去登录
   if (!store.user?.token && !whileList.includes(to.path)) return '/login'
+})
+
+router.afterEach((to) => {
+  // 修改标题
+  document.title = `好医生-${to.meta.title || ''}`
+  NProgress.done()
 })
 
 export default router
