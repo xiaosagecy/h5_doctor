@@ -7,6 +7,7 @@ specifiers:
   '@vue/eslint-config-prettier': ^7.0.0
   '@vue/eslint-config-typescript': ^11.0.0
   '@vue/tsconfig': ^0.1.3
+  '@vueuse/core': ^9.3.1
   axios: ^1.1.3
   eslint: ^8.22.0
   eslint-plugin-vue: ^9.3.0
@@ -27,6 +28,7 @@ specifiers:
   vue-tsc: ^0.40.7
 
 dependencies:
+  '@vueuse/core': registry.npmmirror.com/@vueuse/core/9.3.1_vue@3.2.41
   axios: registry.npmmirror.com/axios/1.1.3
   id-validator: registry.npmmirror.com/id-validator/1.3.0
   pinia: registry.npmmirror.com/pinia/2.0.23_lrjaoqkmph6q2hmgd3qeuy6rom
@@ -235,6 +237,12 @@ packages:
     dependencies:
       '@types/node': registry.npmmirror.com/@types/node/16.11.68
     dev: true
+
+  registry.npmmirror.com/@types/web-bluetooth/0.0.16:
+    resolution: {integrity: sha512-oh8q2Zc32S6gd/j50GowEjKLoOVOwHP/bWVjKJInBwQqdOYMdPrf1oVlelTlyfFK3CKxL1uahMDAr+vy8T7yMQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/web-bluetooth/-/web-bluetooth-0.0.16.tgz}
+    name: '@types/web-bluetooth'
+    version: 0.0.16
+    dev: false
 
   registry.npmmirror.com/@typescript-eslint/eslint-plugin/5.40.1_5jnkxinnag2jpittelojhreu6y:
     resolution: {integrity: sha512-FsWboKkWdytGiXT5O1/R9j37YgcjO8MKHSUmWnIEjVaz0krHkplPnYi7mwdb+5+cs0toFNQb0HIrN7zONdIEWg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@typescript-eslint/eslint-plugin/-/eslint-plugin-5.40.1.tgz}
@@ -631,6 +639,39 @@ packages:
     dependencies:
       '@types/node': registry.npmmirror.com/@types/node/16.11.68
     dev: true
+
+  registry.npmmirror.com/@vueuse/core/9.3.1_vue@3.2.41:
+    resolution: {integrity: sha512-xriyD+v3D2ObH/UtnkEl+1sbcLBVHNaZaLi/rqoNEe/B92hggDEFQIGXoQUjdRzYOjASHSezf9uCDtmd7LeWyA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@vueuse/core/-/core-9.3.1.tgz}
+    id: registry.npmmirror.com/@vueuse/core/9.3.1
+    name: '@vueuse/core'
+    version: 9.3.1
+    dependencies:
+      '@types/web-bluetooth': registry.npmmirror.com/@types/web-bluetooth/0.0.16
+      '@vueuse/metadata': registry.npmmirror.com/@vueuse/metadata/9.3.1
+      '@vueuse/shared': registry.npmmirror.com/@vueuse/shared/9.3.1_vue@3.2.41
+      vue-demi: registry.npmmirror.com/vue-demi/0.13.11_vue@3.2.41
+    transitivePeerDependencies:
+      - '@vue/composition-api'
+      - vue
+    dev: false
+
+  registry.npmmirror.com/@vueuse/metadata/9.3.1:
+    resolution: {integrity: sha512-G1BPhtx3OHaL/y4OZBofh6Xt02G1VA9PuOO8nac9sTKMkMqfyez5VfkF3D9GUjSRNO7cVWyH4rceeGXfr2wdMg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@vueuse/metadata/-/metadata-9.3.1.tgz}
+    name: '@vueuse/metadata'
+    version: 9.3.1
+    dev: false
+
+  registry.npmmirror.com/@vueuse/shared/9.3.1_vue@3.2.41:
+    resolution: {integrity: sha512-YFu3qcnVeu0S2L4XdQJtBpDcjz6xwqHZtTv/XRhu66/yge1XVhxskUcc7VZbX52xF9A34V6KCfwncP9YDqYFiw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@vueuse/shared/-/shared-9.3.1.tgz}
+    id: registry.npmmirror.com/@vueuse/shared/9.3.1
+    name: '@vueuse/shared'
+    version: 9.3.1
+    dependencies:
+      vue-demi: registry.npmmirror.com/vue-demi/0.13.11_vue@3.2.41
+    transitivePeerDependencies:
+      - '@vue/composition-api'
+      - vue
+    dev: false
 
   registry.npmmirror.com/acorn-jsx/5.3.2_acorn@8.8.0:
     resolution: {integrity: sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/acorn-jsx/-/acorn-jsx-5.3.2.tgz}
