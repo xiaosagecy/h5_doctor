@@ -1,3 +1,5 @@
+import { ConsultType, Illnesstime } from '@/enums'
+
 // 文章类型，关注医生的文章｜推荐的文章｜减脂｜饮食
 export type KnowledgeType = 'like' | 'recommend' | 'fatReduction' | 'food'
 
@@ -90,3 +92,24 @@ export type DoctorPage = {
 
 // 关注的类型，医生｜文章｜百科话题｜疾病
 export type FollowType = 'doc' | 'knowledge' | 'topic' | 'disease'
+
+// 问诊订单（记录）类型
+export type Image = {
+    id: string
+    url: string
+}
+export type Consult = {
+    id: string
+    type: ConsultType
+    couponId: string
+    illnessType: 0 | 1
+    patientId: string
+    depId: string
+    illnessDesc: string
+    illnessTime: ConsultTime
+    consultFlag: 0 | 1
+    pictures: Image[]
+}
+
+// Partial 把对象类型的属性全部转换为可选属性  --- Required把对象全部属性转换成必选属性
+export type PartialConsult = Partial<Consult>
