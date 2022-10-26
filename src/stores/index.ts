@@ -17,3 +17,4 @@ export default pinia
 // export { useUserStore }
 // 统一导出
 export * from './modules/user'
+export * from './modules/consult'
