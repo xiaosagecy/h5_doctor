@@ -113,3 +113,17 @@ export type Consult = {
 
 // Partial 把对象类型的属性全部转换为可选属性  --- Required把对象全部属性转换成必选属性
 export type PartialConsult = Partial<Consult>
+
+
+// 科室
+export type SubDep = {
+    // 科室ID
+    id: string
+    // 科室名称
+    name: string
+}
+
+export type TopDep = SubDep & {
+    // 二级科室数组
+    child: SubDep[]
+}
