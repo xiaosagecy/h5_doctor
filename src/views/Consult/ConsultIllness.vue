@@ -14,10 +14,45 @@
                 </p>
             </div>
         </div>
+        <!-- 表单 -->
+        <div class="illness-form">
+            <van-field type="textarea" rows="3" placeholder="请详细描述你的病情，病情描述不能为空" v-model="form.illnessDesc">
+            </van-field>
+            <div class="item">
+                <p>本次患病多久了？</p>
+                <cp-radio-btn :options="timeOptions" v-model="form.illnessTime"></cp-radio-btn>
+            </div>
+            <div class="item">
+                <p>此次病情是否去医院就诊过？</p>
+                <cp-radio-btn :options="flagOptions" v-model="form.consultFlag"></cp-radio-btn>
+            </div>
+        </div>
     </div>
 </template>
 
 <script setup lang='ts'>
+import type { ConsultIllness } from '@/types/consult'
+import { ref } from 'vue'
+import { IllnessTime } from '@/enums'
+
+const timeOptions = [
+    { label: '一周内', value: IllnessTime.Week },
+    { label: '一月内', value: IllnessTime.Month },
+    { label: '半年内', value: IllnessTime.HalfYear },
+    { label: '大于半年', value: IllnessTime.More },
+]
+
+const flagOptions = [
+    { label: '就趁过', value: 0 },
+    { label: '没就诊过', value: 1 }
+]
+
+const form = ref<ConsultIllness>({
+    illnessDesc: '',
+    illnessTime: undefined,
+    consultFlag: undefined,
+    pictures: []
+})
 
 </script>
 
@@ -65,6 +100,25 @@
                 font-size: 12px;
                 margin-right: 2px;
             }
+        }
+    }
+}
+
+.illness-form {
+    padding: 15px;
+
+    .van-field {
+        padding: 0;
+
+        &::after {
+            border-bottom: none;
+        }
+    }
+
+    .item {
+        >p {
+            color: var(--pc-text3);
+            padding: 15px 0;
         }
     }
 }

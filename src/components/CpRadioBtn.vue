@@ -1,12 +1,13 @@
 <!-- 按钮组件单选框封装 -->
 <template>
     <div class="cp-radio-btn">
-        <a class="item" href="javascript:;" :class="{ active: modelValue === item.value}" v-for="item in options"
-            :key="item.value" @click="toggleItem(item.value)">{{item.label}}</a>
+        <a class="item" href="javascript:;" :class="{ active: modelValue === item.value }" v-for="item in options"
+            :key="item.value" @click="toggleItem(item.value)">{{ item.label }}</a>
     </div>
 </template>
 
 <script setup lang='ts'>
+
 // 接收值
 defineProps<{
     options: {
