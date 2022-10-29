@@ -100,14 +100,23 @@ export type Image = {
 }
 export type Consult = {
     id: string
+    // 就诊类型1找医生 2极速问诊 3开药问诊默认是1
     type: ConsultType
+    // 使用优惠券，必传可使用优惠券id
     couponId: string
+    // 极速问诊类型：0普通1三甲
     illnessType: 0 | 1
+    // 患者id,用于关联患者信息
     patientId: string
+    // 选择的科室id-极速问诊必填(选择的科室)
     depId: string
+    // 病情--症状描述
     illnessDesc: string
+    // 找医生/极速问诊-患病时间1一周内2一月内3半年内4半年以上
     illnessTime: ConsultTime
+    // 找医生/极速问诊-是否就诊过0未就诊1就诊过
     consultFlag: 0 | 1
+    // 补充病例信息-图片集合
     pictures: Image[]
 }
 

@@ -35,17 +35,21 @@
                 </van-uploader>
                 <p class="tip" v-if="!fileList.length">上传内容权医生可见，最多9张图片，最大5MB</p>
             </div>
+            <van-button :class="{ disable }" @click="next" type="primary" block round>下一步</van-button>
         </div>
     </div>
 </template>
 
 <script setup lang='ts'>
 import type { ConsultIllness } from '@/types/consult'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { IllnessTime } from '@/enums'
 // 引入vant上传需要的type
 import type { UploaderAfterRead, UploaderFileListItem } from 'vant/lib/uploader/types'
 import { uploadImage } from '@/services/consult'
+import { useRouter } from 'vue-router'
+import { Toast } from 'vant'
+import { useConsultStore } from '@/stores'
 
 const timeOptions = [
     { label: '一周内', value: IllnessTime.Week },
@@ -87,6 +91,22 @@ const onAfterRead: UploaderAfterRead = (item) => {
 
 const onDeleteImg = (item: UploaderFileListItem) => {
     form.value.pictures = form.value.pictures?.filter(pic => pic.url !== item.url)
+}
+
+const disable = computed(() =>
+    !form.value.illnessDesc || form.value.illnessTime === undefined || form.value.consultFlag === undefined
+)
+
+const router = useRouter()
+const store = useConsultStore()
+const next = () => {
+    if (!form.value.illnessDesc) return Toast('请输入病情描述')
+    if (form.value.illnessTime === undefined) return Toast('请选择症状持续时间')
+    if (form.value.consultFlag === undefined) return Toast('请选择是否已经就诊')
+    // 设置病情描述
+    store.setIllness(form.value)
+    // 跳转档案管理，需要根据 isChange 实现选择功能
+    router.push('/user/patient?isChange=1')
 }
 
 </script>
@@ -200,6 +220,17 @@ const onDeleteImg = (item: UploaderFileListItem) => {
                 color: var(--cp-text3);
             }
         }
+    }
+}
+
+.van-button {
+    font-size: 16px;
+    margin-bottom: 30px;
+
+    &.disable {
+        opacity: 1;
+        background: #fafafa;
+        color: #d9dbde;
     }
 }
 </style>
