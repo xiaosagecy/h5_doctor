@@ -1,13 +1,19 @@
 <template>
     <div class="patient-page">
-        <cp-nav-bar title="家庭档案"></cp-nav-bar>
+        <cp-nav-bar :title="isChange ? '选择患者' : '家庭档案'" />
+        <!-- 头部信息 -->
+        <div class="patient-change">
+            <h3>请选择患者信息</h3>
+            <p>以便医生给出更精准的治疗，信息仅医生可见的人</p>
+        </div>
         <div class="patient-list">
-            <div class="patient-item" v-for="item in list" :key="item.id">
+            <div class="patient-item" v-for="item in list" :key="item.id" @click="selectedPatient(item)"
+                :class="{ selected: patientId === item.id }">
                 <div class="info">
-                    <span class="name">{{item.name}}</span>
+                    <span class="name">{{ item.name }}</span>
                     <span class="id">{{ item.idCard.replace(/^(.{6})(?:\d+)(.{4})$/, '\$1******\$2') }}</span>
-                    <span>{{item.genderValue}}</span>
-                    <span>{{item.age}}岁</span>
+                    <span>{{ item.genderValue }}</span>
+                    <span>{{ item.age }}岁</span>
                 </div>
                 <div class="icon" @click="showPopup(item)">
                     <cp-icon name="user-edit"></cp-icon>
@@ -20,11 +26,15 @@
             </div>
             <div class="patient-tip">最多可添加 6 人</div>
         </div>
+        <!-- 底部按钮 -->
+        <div class="patient-next" v-if="isChange">
+            <van-button type="primary" round block @click="next">下一步</van-button>
+        </div>
         <!-- 弹出层 -->
         <!-- 右侧边栏：用于点击添加患者档案信息从右侧滑动弹出表单 -->
         <!-- :show="show" @update:show="show=$event"也可以改为v-model -->
-        <van-popup :show="show" @update:show="show=$event" position="right">
-            <cp-nav-bar :back="() => (show = false)" :title="patient.id ? '编辑患者 ':'添加患者'" right-text="保存"
+        <van-popup :show="show" @update:show="show = $event" position="right">
+            <cp-nav-bar :back="() => (show = false)" :title="patient.id ? '编辑患者 ' : '添加患者'" right-text="保存"
                 @click-right="submit"></cp-nav-bar>
             <!-- 添加患者档案表单 -->
             <van-form autocomplete="off">
@@ -55,6 +65,22 @@ import type { Patient } from '@/types/user'
 import { ref, onMounted, computed } from 'vue'
 import { Toast, Dialog } from 'vant'
 import Validator from 'id-validator'
+import { useRoute } from 'vue-router'
+import { useConsultStore } from '@/stores'
+import router from '@/router'
+
+// 选择患者
+const route = useRoute()
+const store = useConsultStore()
+
+const isChange = computed(() => route.query.isChange === '1')
+
+const patientId = ref<string>()
+const selectedPatient = (item: Patient) => {
+    if (isChange.value) {
+        patientId.value = item.id
+    }
+}
 
 // 页面初始化加载数据
 const list = ref<Patient[]>([])
@@ -62,6 +88,13 @@ const loadList = async () => {
     const res = await getPatientList()
     // console.log(res)
     list.value = res.data
+    // 设置默认选中ID，当你是选择患者到时候，且有患者信息的时候
+    if (isChange.value && list.value.length) {
+        // 选出默认就诊人
+        const defPatient = list.value.find(item => item.defaultFlag === 1)
+        if (defPatient) patientId.value = defPatient.id
+        else patientId.value = list.value[0].id
+    }
 }
 
 onMounted(() => {
@@ -145,6 +178,13 @@ const remove = async () => {
         Toast.success('删除成功')
     }
 }
+
+const next = async () => {
+    if (!patientId.value) return Toast('请选就诊患者')
+    store.setPatient(patientId.value)
+    router.push('/consult/pay')
+}
+
 </script>
 
 <style lang="scss" scoped>
@@ -258,5 +298,29 @@ const remove = async () => {
 .patient-tip {
     color: var(--cp-tag);
     padding: 12px 0;
+}
+
+.patient-change {
+    padding: 15px;
+
+    >h3 {
+        font-weight: normal;
+        margin-bottom: 5px;
+    }
+
+    >p {
+        color: var(--cp-text3);
+    }
+}
+
+.patient-next {
+    padding: 15px;
+    background-color: #fff;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 80px;
+    box-sizing: border-box;
 }
 </style>
