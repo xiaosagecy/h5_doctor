@@ -33,7 +33,7 @@
                 <van-uploader upload-icon="photo-o" upload-text="上传图片" max-count="9" max-size="5 * 1024 * 1024"
                     :after-read="onAfterRead" @delete="onDeleteImg" v-model="fileList">
                 </van-uploader>
-                <p class="tip">上传内容权医生可见，最多9张图片，最大5MB</p>
+                <p class="tip" v-if="!fileList.length">上传内容权医生可见，最多9张图片，最大5MB</p>
             </div>
         </div>
     </div>
@@ -45,6 +45,7 @@ import { ref } from 'vue'
 import { IllnessTime } from '@/enums'
 // 引入vant上传需要的type
 import type { UploaderAfterRead, UploaderFileListItem } from 'vant/lib/uploader/types'
+import { uploadImage } from '@/services/consult'
 
 const timeOptions = [
     { label: '一周内', value: IllnessTime.Week },
@@ -67,16 +68,25 @@ const form = ref<ConsultIllness>({
 
 const fileList = ref([])
 const onAfterRead: UploaderAfterRead = (item) => {
-    // TODO 上传图片
-    console.log(' 上传图片')
-    console.log(fileList.value)
+    if (Array.isArray(item)) return
+    if (!item.file) return
+    // 开始上传
+    item.status = 'uploading'
+    item.message = '上传中...'
+    uploadImage(item.file).then(res => {
+        item.status = 'done'
+        item.message = undefined
+        item.url = res.data.url
+        form.value.pictures?.push(res.data)
+    }).catch(() => {
+        item.status = 'failed'
+        item.message = '上传失败'
+    })
+
 }
 
 const onDeleteImg = (item: UploaderFileListItem) => {
-    // TODO 删除图片
-    console.log(' 删除图片')
-    console.log(fileList.value)
-
+    form.value.pictures = form.value.pictures?.filter(pic => pic.url !== item.url)
 }
 
 </script>
