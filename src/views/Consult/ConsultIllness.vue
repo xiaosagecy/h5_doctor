@@ -26,6 +26,15 @@
                 <p>此次病情是否去医院就诊过？</p>
                 <cp-radio-btn :options="flagOptions" v-model="form.consultFlag"></cp-radio-btn>
             </div>
+            <!-- 图片上传 -->
+            <div class="illness-img">
+                <!-- 最大数量max-count，最大体积max-size -->
+                <!-- 选择图片后触发after-read函数，删除图片出发delete函数 -->
+                <van-uploader upload-icon="photo-o" upload-text="上传图片" max-count="9" max-size="5 * 1024 * 1024"
+                    :after-read="onAfterRead" @delete="onDeleteImg" v-model="fileList">
+                </van-uploader>
+                <p class="tip">上传内容权医生可见，最多9张图片，最大5MB</p>
+            </div>
         </div>
     </div>
 </template>
@@ -34,6 +43,8 @@
 import type { ConsultIllness } from '@/types/consult'
 import { ref } from 'vue'
 import { IllnessTime } from '@/enums'
+// 引入vant上传需要的type
+import type { UploaderAfterRead, UploaderFileListItem } from 'vant/lib/uploader/types'
 
 const timeOptions = [
     { label: '一周内', value: IllnessTime.Week },
@@ -53,6 +64,20 @@ const form = ref<ConsultIllness>({
     consultFlag: undefined,
     pictures: []
 })
+
+const fileList = ref([])
+const onAfterRead: UploaderAfterRead = (item) => {
+    // TODO 上传图片
+    console.log(' 上传图片')
+    console.log(fileList.value)
+}
+
+const onDeleteImg = (item: UploaderFileListItem) => {
+    // TODO 删除图片
+    console.log(' 删除图片')
+    console.log(fileList.value)
+
+}
 
 </script>
 
@@ -119,6 +144,51 @@ const form = ref<ConsultIllness>({
         >p {
             color: var(--pc-text3);
             padding: 15px 0;
+        }
+    }
+}
+
+.illness-img {
+    padding-top: 16px;
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+
+    .tip {
+        font-size: 12px;
+        color: var(--cp-tip);
+    }
+
+    // 样式穿透 把vant的上传组件样式给改变
+    ::v-deep() {
+        .van-uploader {
+            &_preview {
+                &-delete {
+                    left: -6px;
+                    top: -6px;
+                    border-radius: 50%;
+                    background-color: var(--cp-primary);
+                    width: 20px;
+                    height: 20px;
+
+                    &-icon {
+                        transform: scale(0.9) translate(-22%, 22%);
+                    }
+                }
+
+                &-image {
+                    border-radius: 8px;
+                    overflow: hidden;
+                }
+            }
+
+            &_upload {
+                border-radius: 8px;
+            }
+
+            &_upload-icon {
+                color: var(--cp-text3);
+            }
         }
     }
 }
