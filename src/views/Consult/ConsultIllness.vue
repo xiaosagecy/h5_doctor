@@ -41,14 +41,14 @@
 </template>
 
 <script setup lang='ts'>
-import type { ConsultIllness } from '@/types/consult'
-import { ref, computed } from 'vue'
+import type { ConsultIllness, Image } from '@/types/consult'
+import { ref, computed, onMounted } from 'vue'
 import { IllnessTime } from '@/enums'
 // 引入vant上传需要的type
 import type { UploaderAfterRead, UploaderFileListItem } from 'vant/lib/uploader/types'
 import { uploadImage } from '@/services/consult'
 import { useRouter } from 'vue-router'
-import { Toast } from 'vant'
+import { Dialog, Toast } from 'vant'
 import { useConsultStore } from '@/stores'
 
 const timeOptions = [
@@ -70,7 +70,8 @@ const form = ref<ConsultIllness>({
     pictures: []
 })
 
-const fileList = ref([])
+const fileList = ref<Image[]>([])
+
 const onAfterRead: UploaderAfterRead = (item) => {
     if (Array.isArray(item)) return
     if (!item.file) return
@@ -108,6 +109,23 @@ const next = () => {
     // 跳转档案管理，需要根据 isChange 实现选择功能
     router.push('/user/patient?isChange=1')
 }
+
+// 数据回显
+onMounted(() => {
+    if (store.consult.illnessDesc) {
+        Dialog.confirm({
+            title: '温馨提示',
+            message: '是否恢复您之前填写的病情信息？',
+            confirmButtonColor: 'var(--cp-primary)'
+        }).then(() => {
+            // 确认
+            const { illnessDesc, illnessTime, consultFlag, pictures } = store.consult
+            form.value = { illnessDesc, illnessTime, consultFlag, pictures }
+            // 图片回显
+            fileList.value = pictures || []
+        })
+    }
+})
 
 </script>
 
