@@ -1,4 +1,4 @@
-import type { KnowledgePage, KnowledgeParams, DoctorPage, PageParams, FollowType, TopDep, Image } from '@/types/consult'
+import type { KnowledgePage, KnowledgeParams, DoctorPage, PageParams, FollowType, TopDep, Image, ConsultOrderPreData, ConsultOrderPreParams } from '@/types/consult'
 import { request } from '@/utils/request'
 
 
@@ -27,5 +27,10 @@ export const uploadImage = (file: File) => {
     fd.append('file', file)
     return request<Image>('/upload', 'post', fd)
 }
+
+
+// 拉取预支付订单信息
+export const getConsultOrderPre = (params: ConsultOrderPreParams) =>
+    request<ConsultOrderPreData>('/patient/consult/order/pre', 'GET', params)
 
 

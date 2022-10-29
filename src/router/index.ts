@@ -13,10 +13,11 @@ const router = createRouter({
   // import.meta.env.BASE_URL是vite配置的路由基准地址，默认是'/'
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    { path: '/login', component: () => import('@/views/Login/index.vue') },
+    { path: '/login', component: () => import('@/views/Login/index.vue'), meta: { title: '登陆' } },
     {
       path: '/',
       component: () => import('@/views/Layout/index.vue'),
+      redirect: '/home',
       children: [
         { path: '/home', component: () => import('@/views/Home/index.vue'), meta: { title: '首页' } },
         { path: '/article', component: () => import('@/views/Article/index.vue'), meta: { title: '健康百科' } },
@@ -24,7 +25,7 @@ const router = createRouter({
         { path: '/user', component: () => import('@/views/User/index.vue'), meta: { title: '个人中心' } },
       ]
     },
-    { path: '/user/patients', component: () => import('@/views/User/PatientPage.vue'), meta: { title: '家庭档案' } },
+    { path: '/user/patient', component: () => import('@/views/User/PatientPage.vue'), meta: { title: '家庭档案' } },
     { path: '/consult/fast', component: () => import('@/views/Consult/ConsultFast.vue'), meta: { title: '极速问诊' } },
     { path: '/consult/dep', component: () => import('@/views/Consult/ConsultDep.vue'), meta: { title: '选择科室' } },
     { path: '/consult/illness', component: () => import('@/views/Consult/ConsultIllness.vue'), meta: { title: '病情描述' } },
