@@ -24,16 +24,18 @@
         </div>
         <van-submit-bar button-type="primary" :price="payInfo.actualPayment * 100" button-text="立即支付" text-align="left"
             @click="submit" :loading="loading" />
-        <van-action-sheet v-model:show="show" title="选择支付方式">
+        <!--close-on-popstate 是否在页面回退时自动关闭 -->
+        <van-action-sheet v-model:show="show" title="选择支付方式" :closeable="false" :before-close="onClose"
+            :close-on-popstate="false">
             <div class="pay-type">
-                <p class="amount">¥{{ payInfo.actualPayment.toFixed(2) }}</p>
+                <p class="amount">￥{{ payInfo.actualPayment.toFixed(2) }}</p>
                 <van-cell-group>
                     <van-cell title="微信支付" @click="paymentMethod = 0">
                         <template #icon>
                             <cp-icon name="consult-wechat" />
                         </template>
                         <template #extra>
-                            <van-checkbox :checke="paymentMethod === 0" />
+                            <van-checkbox :checked="paymentMethod === 0" />
                         </template>
                     </van-cell>
                     <van-cell title="支付宝支付" @click="paymentMethod = 1">
@@ -41,12 +43,12 @@
                             <cp-icon name="consult-alipay" />
                         </template>
                         <template #extra>
-                            <van-checkbox :checke="paymentMethod === 1" />
+                            <van-checkbox :checked="paymentMethod === 1" />
                         </template>
                     </van-cell>
                 </van-cell-group>
                 <div class="btn">
-                    <van-button type="primary" round block>立即支付</van-button>
+                    <van-button type="primary" round block @click="pay">立即支付</van-button>
                 </div>
             </div>
         </van-action-sheet>
@@ -54,13 +56,14 @@
 </template>
 
 <script setup lang='ts'>
-import { getConsultOrderPre, createConsultOrder } from '@/services/consult'
+import { getConsultOrderPre, createConsultOrder, getConsultOrderPayUrl } from '@/services/consult'
 import { getPatientDetail } from '@/services/use'
 import { useConsultStore } from '@/stores'
 import type { ConsultOrderPreData } from '@/types/consult'
 import type { Patient } from '@/types/user'
-import { Toast } from 'vant'
+import { Dialog, Toast } from 'vant'
 import { onMounted, ref } from 'vue'
+import { onBeforeRouteLeave, useRouter } from 'vue-router'
 
 const store = useConsultStore()
 
@@ -72,7 +75,7 @@ const loadData = async () => {
     })
     payInfo.value = res.data
     // 设置默认优惠券
-    store.setCoupon(payInfo.value.couponId)
+    store.setCoupon(res.data.couponId)
 
 }
 
@@ -104,6 +107,61 @@ const submit = async () => {
     store.clear()
     show.value = true
 }
+
+onBeforeRouteLeave(() => {
+    if (orderId.value) return false
+})
+
+const router = useRouter()
+const onClose = () => {
+    return Dialog.confirm({
+        title: '关闭支付',
+        message: '取消支付将无法获得医生回复，医生接诊名额有限，是否确认关闭？',
+        cancelButtonText: '仍要关闭',
+        confirmButtonText: '继续支付',
+        confirmButtonColor: 'var(--cp-primary)'
+    }).then(() => {
+        return false
+    }).catch(() => {
+        orderId.value = ''
+        router.push('/user/consult')
+        return true
+    })
+}
+
+// 跳转支付
+const pay = async () => {
+    if (paymentMethod.value === undefined) return Toast('请选择支付方式')
+    Toast.loading('跳转支付')
+    const res = await getConsultOrderPayUrl({
+        orderId: orderId.value,
+        paymentMethod: paymentMethod.value,
+        payCallback: 'http://localhost/room'
+    })
+    window.location.href = res.data.payUrl
+}
+
+onMounted(() => {
+    if (
+        !store.consult.type ||
+        !store.consult.illnessType ||
+        !store.consult.depId ||
+        !store.consult.patientId
+    ) {
+        return Dialog.alert({
+            title: '温馨提示',
+            message: '问诊信息不完整请重新填写，如有未支付的问诊订单可在问诊记录中继续支付',
+            // 是否在页面回退时自动关闭
+            closeOnPopstate: false
+        }).then(() => {
+            router.push('/')
+        })
+    }
+    loadData()
+    loadPatient()
+})
+
+
 </script>
 
 <style scoped lang="scss">
