@@ -1,4 +1,4 @@
-import type { KnowledgePage, KnowledgeParams, DoctorPage, PageParams, FollowType, TopDep, Image, ConsultOrderPreData, ConsultOrderPreParams } from '@/types/consult'
+import type { KnowledgePage, KnowledgeParams, DoctorPage, PageParams, FollowType, TopDep, Image, ConsultOrderPreData, ConsultOrderPreParams, PartialConsult } from '@/types/consult'
 import { request } from '@/utils/request'
 
 
@@ -33,4 +33,8 @@ export const uploadImage = (file: File) => {
 export const getConsultOrderPre = (params: ConsultOrderPreParams) =>
     request<ConsultOrderPreData>('/patient/consult/order/pre', 'GET', params)
 
+
+// 生产订单
+export const createConsultOrder = (data: PartialConsult) =>
+    request<{ id: string }>('/patient/consult/order', 'post', data)
 
