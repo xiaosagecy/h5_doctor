@@ -228,3 +228,55 @@ router.afterEach((to) => {
   background-color: var(--cp-primary) !important;
 }
 ```
+
+### websocket介绍
+什么是websocket？
+- 是一种网络通信协议，和HTTP协议一样。
+
+为什么需要websocket？
+- 因为HTTP协议有一个缺陷，通信只能由客户端发起。
+
+  
+
+**socket.io的使用**
+
+如何使用客户端js库？
+```bash
+pnpm add socket.io-client
+```
+
+如何建立连接？
+```ts
+import io from 'socket.io-client'
+// 参数1：不传默认是当前服务域名，开发中传入服务器地址
+// 参数2：配置参数，根据需要再来介绍
+const socket = io()
+```
+
+如何确定连接成功？
+```ts
+socket.on('connect', () => {
+  // 建立连接成功
+})
+```
+
+如何发信息？
+```ts
+// chat message 发送消息事件，由后台约定，可变
+socket.emit('chat message', '消息内容')
+```
+
+如何接受消息？
+```ts
+// chat message 接收消息事件，由后台约定，可变
+socket.on('chat message', (ev) => {
+  // ev 是服务器发送的消息
+})
+```
+
+如何关闭连接？
+```ts
+// 离开组件需要使用
+socket.close()
+```
+
