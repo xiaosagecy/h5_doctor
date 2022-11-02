@@ -20,6 +20,8 @@ import { useUserStore } from '@/stores'
 import { useRoute } from 'vue-router'
 import { MsgType } from '@/enums'
 import type { Message, TimeMessages } from '@/types/room'
+import type { ConsultOrderItem } from '@/types/consult'
+import { getConsultOrderDetail } from '@/services/consult'
 
 const store = useUserStore()
 const route = useRoute()
@@ -77,6 +79,24 @@ onMounted(() => {
         list.value.unshift(...arr)
     })
 })
+
+/**
+ * 接受状态的控制：（订单详情）
+ * 1.组件挂载后，需要知道当前的接诊状态
+ * 2.订单状态变更后，需要只知道已经变化，更新当前接诊状态
+ * 3.依赖状态：
+ *      1） 状态栏 需要条件渲染，有倒计时
+ *      2)  操作栏 需要禁用和启用
+ */
+const consult = ref<ConsultOrderItem>()
+onMounted(async () => {
+    // 需要传一个订单号 使用断言
+    const res = await getConsultOrderDetail(route.query.orderId as string)
+    consult.value = res.data
+    // console.log(consult.value)
+    // console.log(route.query.orderId)
+})
+
 
 
 </script>
