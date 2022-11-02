@@ -2,8 +2,9 @@
     <div class="room-page">
         <cp-nav-bar title="问诊室" />
         <room-status></room-status>
-        <room-message></room-message>
+        <room-message :list="list"></room-message>
         <room-action></room-action>
+
     </div>
 </template>
 
@@ -13,15 +14,19 @@ import RoomMessage from './components/RoomMessage.vue'
 import RoomAction from './components/RoomAction.vue'
 import type { Socket } from 'socket.io-client'
 import { io } from 'socket.io-client'
-import { onMounted, onUnmounted } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import { baseURL } from '@/utils/request'
 import { useUserStore } from '@/stores'
 import { useRoute } from 'vue-router'
+import { MsgType } from '@/enums'
+import type { Message, TimeMessages } from '@/types/room'
 
 const store = useUserStore()
 const route = useRoute()
 
 let socket: Socket
+// 消息列表
+const list = ref<Message[]>([])
 
 onUnmounted(() => {
     socket.close()
@@ -55,7 +60,24 @@ onMounted(() => {
         // 已经断开链接
         console.log('disconnect')
     })
+    // 聊天记录
+    socket.on('chatMsgList', ({ data }: { data: TimeMessages[] }) => {
+        // 准备转换常规消息列表
+        const arr: Message[] = []
+        data.forEach((item, i) => {
+            arr.push({
+                msgType: MsgType.Notify,
+                msg: { content: item.createTime },
+                createTime: item.createTime,
+                id: item.createTime
+            })
+            arr.push(...item.items)
+        })
+        // 追加到聊天消息列表
+        list.value.unshift(...arr)
+    })
 })
+
 
 </script>
 

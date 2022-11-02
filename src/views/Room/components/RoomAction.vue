@@ -1,17 +1,19 @@
 <template>
     <div class="room-action">
         <van-field type="text" class="input" :border="false" placeholder="问医生" autocomplete="off"></van-field>
+        <!-- 不预览，使用小图标作为上传按钮 -->
         <van-uploader :preview-image="false">
             <cp-icon name="consult-img" />
         </van-uploader>
     </div>
 </template>
+  
 
 <script setup lang='ts'>
 
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .room-action {
     position: fixed;
     left: 0;
@@ -26,7 +28,7 @@
     box-sizing: border-box;
 
     .input {
-        background-color: var((--cp-bg));
+        background-color: var(--cp-bg);
         border: none;
         border-radius: 25px;
         margin-right: 10px;
