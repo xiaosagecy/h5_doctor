@@ -1,9 +1,11 @@
 <template>
     <div class="room-page">
         <cp-nav-bar title="问诊室" />
-        <room-status></room-status>
+        <!-- status为订单状态，countdown为倒计时 -->
+        <room-status :status="consult?.status" :countdown="consult?.countdown"></room-status>
         <room-message :list="list"></room-message>
-        <room-action></room-action>
+        <!-- ConsultChat为问诊中 -->
+        <room-action :disabled="consult?.status !== OrderType.ConsultChat"></room-action>
 
     </div>
 </template>
@@ -18,7 +20,7 @@ import { onMounted, onUnmounted, ref } from 'vue'
 import { baseURL } from '@/utils/request'
 import { useUserStore } from '@/stores'
 import { useRoute } from 'vue-router'
-import { MsgType } from '@/enums'
+import { MsgType, OrderType } from '@/enums'
 import type { Message, TimeMessages } from '@/types/room'
 import type { ConsultOrderItem } from '@/types/consult'
 import { getConsultOrderDetail } from '@/services/consult'
@@ -77,6 +79,11 @@ onMounted(() => {
         })
         // 追加到聊天消息列表
         list.value.unshift(...arr)
+    })
+    // 等待连接成功后，注册事件，订单状态变更
+    socket.on('statusChange', async () => {
+        const res = await getConsultOrderDetail(route.query.orderId as string)
+        consult.value = res.data
     })
 })
 

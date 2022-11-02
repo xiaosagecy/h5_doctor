@@ -12,7 +12,10 @@ import path from 'path'
 export default defineConfig({
   plugins: [
     // 解析单文件组件的插件
-    vue(),
+    vue({
+      // 开启解构Props响应式转换功能
+      reactivityTransform: true
+    }),
     // 自动导入的插件，解析器可以是 vant element and-vue
     Components({
       // 不开起自动生成声明文件 dts: false
