@@ -5,7 +5,8 @@
         <room-status :status="consult?.status" :countdown="consult?.countdown"></room-status>
         <room-message :list="list"></room-message>
         <!-- ConsultChat为问诊中 -->
-        <room-action @sent-text="sendText" :disabled="consult?.status !== OrderType.ConsultChat"></room-action>
+        <room-action @send-text="sendText" @send-image="sendIamge"
+            :disabled="consult?.status !== OrderType.ConsultChat"></room-action>
 
     </div>
 </template>
@@ -22,7 +23,7 @@ import { useUserStore } from '@/stores'
 import { useRoute } from 'vue-router'
 import { MsgType, OrderType } from '@/enums'
 import type { Message, TimeMessages } from '@/types/room'
-import type { ConsultOrderItem } from '@/types/consult'
+import type { ConsultOrderItem, Image } from '@/types/consult'
 import { getConsultOrderDetail } from '@/services/consult'
 
 const store = useUserStore()
@@ -132,6 +133,22 @@ const sendText = (text: string) => {
     })
 }
 
+/**
+ * 发送图片信息
+ * 1.底部操作栏组件，上传图片，成功后传递给父组件（index.vue） 组件{id,url}图片对象
+ * 2.由父组件来发送信息，通过emit发送消息 sendChatMsg
+ * 3.在渲染的时候，区分是自己还是医生
+ */
+const sendIamge = (img: Image) => {
+    socket.emit('sendChatMsg', {
+        form: store.user?.id,
+        to: consult.value?.docInfo?.id,
+        msgTye: MsgType.MsgImage,
+        msg: {
+            picture: img
+        }
+    })
+}
 
 </script>
 

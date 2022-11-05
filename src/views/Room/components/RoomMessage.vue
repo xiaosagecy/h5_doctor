@@ -42,16 +42,13 @@
       <van-image :src="store.user?.avatar" />
     </div>
     <!-- 发消息-图片 -->
-    <!-- <div class="msg msg-to">
+    <div class="msg msg-to" v-if="msgType === MsgType.MsgImage && from === store.user?.id">
       <div class="content">
-        <div class="time">20:12</div>
-        <van-image
-          fit="contain"
-          src="https://yjy-oss-files.oss-cn-zhangjiakou.aliyuncs.com/tuxian/popular_3.jpg"
-        />
+        <div class="time">{{ formatTime(createTime) }}</div>
+        <van-image fit="contain" :src="msg.picture?.url" />
       </div>
       <van-image src="https://yjy-oss-files.oss-cn-zhangjiakou.aliyuncs.com/tuxian/popular_3.jpg" />
-    </div> -->
+    </div>
     <!-- 收消息-文字 -->
     <div class="msg msg-from" v-if="msgType === MsgType.MsgText && from !== store.user?.id">
       <van-image :src="fromAvatar" />
@@ -61,16 +58,13 @@
       </div>
     </div>
     <!-- 收消息-图片 -->
-    <!-- <div class="msg msg-from">
-      <van-image src="https://yjy-oss-files.oss-cn-zhangjiakou.aliyuncs.com/tuxian/popular_3.jpg" />
+    <div class="msg msg-from" v-if="msgType === MsgType.MsgImage && from !== store.user?.id">
+      <van-image :src="fromAvatar" />
       <div class="content">
-        <div class="time">20:12</div>
-        <van-image
-          fit="contain"
-          src="https://yjy-oss-files.oss-cn-zhangjiakou.aliyuncs.com/tuxian/popular_3.jpg"
-        />
+        <div class="time">{{ formatTime(createTime) }}</div>
+        <van-image fit="contain" :src="msg.picture?.url" />
       </div>
-    </div> -->
+    </div>
     <!-- 处方消息 -->
     <!-- <div class="msg msg-recipe">
       <div class="content">
@@ -111,6 +105,7 @@ import type { Image } from '@/types/consult'
 import { ImagePreview } from 'vant'
 import { useUserStore } from '@/stores'
 import dayis from 'dayjs'
+import { nextTick } from 'vue'
 
 defineProps<{
   list: Message[]
