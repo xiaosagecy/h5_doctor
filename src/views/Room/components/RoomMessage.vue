@@ -45,9 +45,10 @@
     <div class="msg msg-to" v-if="msgType === MsgType.MsgImage && from === store.user?.id">
       <div class="content">
         <div class="time">{{ formatTime(createTime) }}</div>
-        <van-image fit="contain" :src="msg.picture?.url" />
+        <!-- load图片加载完毕时触发---图片加载完毕后滚动到最下方 -->
+        <van-image @load="loadSuccess" fit="contain" :src="msg.picture?.url" />
       </div>
-      <van-image src="https://yjy-oss-files.oss-cn-zhangjiakou.aliyuncs.com/tuxian/popular_3.jpg" />
+      <van-image :src="store.user?.avatar" />
     </div>
     <!-- 收消息-文字 -->
     <div class="msg msg-from" v-if="msgType === MsgType.MsgText && from !== store.user?.id">
@@ -62,7 +63,7 @@
       <van-image :src="fromAvatar" />
       <div class="content">
         <div class="time">{{ formatTime(createTime) }}</div>
-        <van-image fit="contain" :src="msg.picture?.url" />
+        <van-image @load="loadSuccess" fit="contain" :src="msg.picture?.url" />
       </div>
     </div>
     <!-- 处方消息 -->
@@ -129,6 +130,12 @@ const onPreviewImage = (pictures?: Image[]) => {
 
 const store = useUserStore()
 const formatTime = (time: string) => dayis(time).format('HH:mm')
+
+// 图片加载成功
+const loadSuccess = () => {
+  window.scrollTo(0, document.body.scrollHeight)
+}
+
 </script>
 
 <style scoped lang="scss">
