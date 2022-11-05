@@ -16,7 +16,7 @@ import RoomMessage from './components/RoomMessage.vue'
 import RoomAction from './components/RoomAction.vue'
 import type { Socket } from 'socket.io-client'
 import { io } from 'socket.io-client'
-import { onMounted, onUnmounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref, nextTick } from 'vue'
 import { baseURL } from '@/utils/request'
 import { useUserStore } from '@/stores'
 import { useRoute } from 'vue-router'
@@ -84,6 +84,14 @@ onMounted(() => {
     socket.on('statusChange', async () => {
         const res = await getConsultOrderDetail(route.query.orderId as string)
         consult.value = res.data
+    })
+    // 接收消息
+    socket.on('receiveChatMsg', async (msg: Message) => {
+        list.value.push(msg)
+        // 是一个promise，等下一帧在执行（等DOM渲染完）
+        await nextTick()
+        // 滚动到最底部
+        window.scrollTo(0, document.body.scrollHeight)
     })
 })
 
