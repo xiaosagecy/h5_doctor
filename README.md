@@ -279,4 +279,21 @@ socket.on('chat message', (ev) => {
 // 离开组件需要使用
 socket.close()
 ```
+### defineEmits的使用
+```ts
+// 子组件
+const emit = defineEmits<
+  // e为派发事件的函数名字，agrs是派发函数需要接受的参数，void是返回类型 
+  (e: 'fn-Name',agrs: string): void
+>()
 
+
+// 父组件
+// 使用子组件的fn-Name派发事件，用fnName函数接收
+<son @fn-Name="fnName"/>
+// setup
+const fnName = (agrs:string) => {
+  // 相应逻辑代码
+}
+
+```

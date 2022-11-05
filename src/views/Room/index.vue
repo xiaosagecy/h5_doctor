@@ -5,7 +5,7 @@
         <room-status :status="consult?.status" :countdown="consult?.countdown"></room-status>
         <room-message :list="list"></room-message>
         <!-- ConsultChat为问诊中 -->
-        <room-action :disabled="consult?.status !== OrderType.ConsultChat"></room-action>
+        <room-action @sent-text="sendText" :disabled="consult?.status !== OrderType.ConsultChat"></room-action>
 
     </div>
 </template>
@@ -104,6 +104,25 @@ onMounted(async () => {
     // console.log(route.query.orderId)
 })
 
+/**
+ * 发送文字信息
+ * 1.底部操作栏组件，输入信息后需要传递给父组件（index.vue）组件
+ * 2.由父组件来发送信息，通过emit发送消息 sendChatMsg
+ * 3.接受信息，on receiveChatMsg接受服务器回的消息证明发送成功，追加到消息列表
+ * 4.在渲染的时候，区分是自己还是医生
+ */
+const sendText = (text: string) => {
+    // 根据后台约定发送消息：from 发送人 to接收人  msgType消息类型  msg{content:文字}
+    // sendChatMsg 发送信息
+    socket.emit('sendChatMsg', {
+        from: store.user?.id,
+        to: consult.value?.docInfo?.id,
+        msgType: MsgType.MsgText,
+        msg: {
+            content: text
+        }
+    })
+}
 
 
 </script>
