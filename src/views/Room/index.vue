@@ -85,7 +85,10 @@ onMounted(() => {
                 createTime: item.createTime,
                 id: item.createTime
             })
-            arr.push(...item.items)
+            // arr.push(...item.items)
+            item.items.forEach(item => {
+                arr.push({ ...item, notScroll: initialMsg.value === false })
+            })
         })
         // 追加到聊天消息列表
         list.value.unshift(...arr)

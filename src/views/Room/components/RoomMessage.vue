@@ -1,5 +1,5 @@
 <template>
-  <template v-for="{ msgType, id, msg, from, createTime, fromAvatar } in list" :key="id">
+  <template v-for="{ msgType, id, msg, from, createTime, fromAvatar, notScroll } in list" :key="id">
     <!-- 病情描述 -->
     <div class="msg msg-illness" v-if="msgType === MsgType.CardPat">
       <div class="patient van-hairline--bottom">
@@ -46,7 +46,7 @@
       <div class="content">
         <div class="time">{{ formatTime(createTime) }}</div>
         <!-- load图片加载完毕时触发---图片加载完毕后滚动到最下方 -->
-        <van-image @load="loadSuccess" fit="contain" :src="msg.picture?.url" />
+        <van-image @load="loadSuccess(notScroll)" fit="contain" :src="msg.picture?.url" />
       </div>
       <van-image :src="store.user?.avatar" />
     </div>
@@ -63,7 +63,7 @@
       <van-image :src="fromAvatar" />
       <div class="content">
         <div class="time">{{ formatTime(createTime) }}</div>
-        <van-image @load="loadSuccess" fit="contain" :src="msg.picture?.url" />
+        <van-image @load="loadSuccess(notScroll)" fit="contain" :src="msg.picture?.url" />
       </div>
     </div>
     <!-- 处方消息 -->
@@ -132,7 +132,9 @@ const store = useUserStore()
 const formatTime = (time: string) => dayis(time).format('HH:mm')
 
 // 图片加载成功
-const loadSuccess = () => {
+const loadSuccess = (notScroll?: boolean) => {
+  // 判断是聊天记录的图片，那就不去滚动
+  if (notScroll === true) return
   window.scrollTo(0, document.body.scrollHeight)
 }
 
