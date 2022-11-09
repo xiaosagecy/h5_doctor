@@ -101,6 +101,9 @@
         <span>订单取消</span>
       </div>
     </div> -->
+    <div class="msg" v-if="msgType === MsgType.CardEva || msgType === MsgType.CardEvaForm">
+      <evaluate-card></evaluate-card>
+    </div>
   </template>
 </template>
 
@@ -114,6 +117,7 @@ import { useUserStore } from '@/stores'
 import dayis from 'dayjs'
 import { getPrescriptionPic } from '@/services/consult'
 import { useRouter } from 'vue-router'
+import EvaluateCard from './EvaluateCard.vue'
 
 
 defineProps<{

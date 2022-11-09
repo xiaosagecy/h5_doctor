@@ -20,7 +20,7 @@ import RoomMessage from './components/RoomMessage.vue'
 import RoomAction from './components/RoomAction.vue'
 import type { Socket } from 'socket.io-client'
 import { io } from 'socket.io-client'
-import { onMounted, onUnmounted, ref, nextTick } from 'vue'
+import { onMounted, onUnmounted, ref, nextTick, provide } from 'vue'
 import { baseURL } from '@/utils/request'
 import { useUserStore } from '@/stores'
 import { useRoute } from 'vue-router'
@@ -196,6 +196,18 @@ const time = ref(dayjs().format('YYYY-MM-DD HH:mm:ss'))
 const onRefresh = () => {
     socket.emit('getChatMsgList', 20, time.value, consult.value?.id)
 }
+
+/**
+ * 评价
+ * 1. 把 未评论 和 已评论的 卡片封装在一个组件
+ * 2. 渲染组件的时候，把消息中的评论信息，传入组件
+ * 3.根据是否有 评价内容，展示对应的卡片
+ *  3.1 有数据展示
+ *  3.2 无数据 绑定表单数据，收集表单数据 提交评论
+ *  3.3 评价成功，修改评论消息状态和数据，切换卡片展示
+ */
+provide('consult', consult)
+
 </script>
 
 <style scoped lang="scss">
