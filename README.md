@@ -306,3 +306,33 @@ const fnName = (agrs:string) => {
 import dayis from 'dayjs'
 const formatTime = (time: string) => dayis(time).format('HH:mm')
 ```
+
+### provide与inject实现祖孙级组件通讯
+`Room/index.vue`祖先组件
+```ts
+import { provide } from 'vue'
+// 向外提供 consult数据
+provide('consult', consult)
+
+const completeEva = (score: number) => {
+    // 加评论对象只需要一个数据score
+    // CardEvaForm未评价信息
+    const item = list.value.find(item => item.msgType === MsgType.CardEvaForm)
+    if (item) {
+        item.msg.evaluateDoc = { score }
+        item.msgType = MsgType.CardEva //CardEva已评价信息
+    }
+}
+// 向外提供提供函数 其他组件使用该函数需要使用内部list数据
+provide('completeEva', completeEva)
+```
+
+`Room/components/EvaluateCard.vue`孙组件
+```ts
+import {inject, type Ref } from 'vue'
+// 组孙级组件之间通信---使用provide与inject
+const consult = inject<Ref<ConsultOrderItem>>('consult')
+
+// 注入函数  --- 需要使用index.vue中的list数据（消息队列数据）
+const completeEva = inject<(score: number) => void>('completeEva')
+```

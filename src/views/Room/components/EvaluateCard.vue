@@ -28,6 +28,8 @@ import type { ConsultOrderItem } from '@/types/consult'
 import type { EvaluateDoc } from '@/types/room'
 import { Toast } from 'vant'
 import { computed, inject, ref, type Ref } from 'vue'
+import { evaluateConsultOrder } from '@/services/consult'
+
 
 defineProps<{
     evaluateDoc?: EvaluateDoc
@@ -41,10 +43,22 @@ const disabled = computed(() => score.value === 0 || !content.value)
 // 组孙级组件之间通信---使用provide与inject
 const consult = inject<Ref<ConsultOrderItem>>('consult')
 
-const submit = () => {
+const completeEva = inject<(score: number) => void>('completeEva')
+const submit = async () => {
     if (!score.value) return Toast('请选择评分')
     if (!content.value) return Toast('请输入评语')
-    console.log(consult?.value.docInfo?.id)
+    if (!consult?.value) return Toast('问诊订单未找到')
+    if (consult.value.docInfo?.id) {
+        await evaluateConsultOrder({
+            docId: consult.value.docInfo?.id,
+            orderId: consult.value.id,
+            score: score.value,
+            content: content.value,
+            anonymousFlag: anonymousFlag.value ? 1 : 0
+        })
+        // 评价请求成功，改成已评价
+        completeEva && completeEva(score.value)
+    }
 }
 </script>
 

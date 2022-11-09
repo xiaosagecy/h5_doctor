@@ -208,6 +208,17 @@ const onRefresh = () => {
  */
 provide('consult', consult)
 
+const completeEva = (score: number) => {
+    // 加评论对象只需要一个数据score
+    // CardEvaForm未评价信息
+    const item = list.value.find(item => item.msgType === MsgType.CardEvaForm)
+    if (item) {
+        item.msg.evaluateDoc = { score }
+        item.msgType = MsgType.CardEva //CardEva已评价信息
+    }
+}
+provide('completeEva', completeEva)
+
 </script>
 
 <style scoped lang="scss">
