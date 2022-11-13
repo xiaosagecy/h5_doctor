@@ -109,8 +109,9 @@
 
 <script setup lang="ts">
 import type { Message, Prescription } from '@/types/room'
-import { IllnessTime, MsgType, PrescriptionStatus } from '@/enums'
-import { timeOptions, flagOptions } from '@/services/constants'
+// import { IllnessTime, MsgType, PrescriptionStatus } from '@/enums'
+// import { timeOptions, flagOptions } from '@/services/constants'
+import { MsgType, PrescriptionStatus } from '@/enums'
 import type { Image } from '@/types/consult'
 import { ImagePreview, Toast } from 'vant'
 import { useUserStore } from '@/stores'
@@ -119,6 +120,7 @@ import dayis from 'dayjs'
 import { useRouter } from 'vue-router'
 import EvaluateCard from './EvaluateCard.vue'
 import { useShowPrescription } from '@/composable'
+import { getIllnessTimeText, getConsultFlagText } from '@/utils/filter'
 
 
 defineProps<{
@@ -126,13 +128,14 @@ defineProps<{
 }>()
 
 // 获取患病时间文字
-const getIllnessTimeText = (time?: IllnessTime) => {
-  return timeOptions.find(item => item.value === time)?.label
-}
-// 获取是否就诊文字
-const getConsultFlagText = (flag?: 0 | 1) => {
-  return flagOptions.find(item => item.value === flag)?.label
-}
+// const getIllnessTimeText = (time?: IllnessTime) => {
+//   return timeOptions.find(item => item.value === time)?.label
+// }
+// // 获取是否就诊文字
+// const getConsultFlagText = (flag?: 0 | 1) => {
+//   return flagOptions.find(item => item.value === flag)?.label
+// }
+
 // 预览图片
 const onPreviewImage = (pictures?: Image[]) => {
   if (pictures && pictures.length) {

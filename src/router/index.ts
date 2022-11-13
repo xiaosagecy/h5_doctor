@@ -37,7 +37,12 @@ const router = createRouter({
         if (to.query.payResult === 'false') return '/user/consult'
       }
     },
-    { path: '/user/consult', component: () => import('@/views/User/ConsultPage.vue'), meta: { title: '问诊记录' } }
+    { path: '/user/consult', component: () => import('@/views/User/ConsultPage.vue'), meta: { title: '问诊记录' } },
+    {
+      path: '/user/consult/:id',
+      component: () => import('@/views/User/ConsultDetail.vue'),
+      meta: { title: '问诊详情' }
+    }
   ]
 })
 
