@@ -30,7 +30,6 @@ import { Toast } from 'vant'
 import { computed, inject, ref, type Ref } from 'vue'
 import { evaluateConsultOrder } from '@/services/consult'
 
-
 defineProps<{
     evaluateDoc?: EvaluateDoc
 }>()
