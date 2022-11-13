@@ -1,7 +1,7 @@
 <template>
     <div class="consult-list">
         <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
-            <consult-item v-for="item in list" :key="item.id" :item="item"></consult-item>
+            <consult-item v-for="item in list" :key="item.id" :item="item" @on-delete="onDelete"></consult-item>
         </van-list>
     </div>
 </template>
@@ -41,6 +41,11 @@ const onLoad = async () => {
         // 加载完毕
         finished.value = true
     }
+}
+
+// 删除一条订单
+const onDelete = (id: string) => {
+    list.value = list.value.filter((item) => item.id !== id)
 }
 
 </script>
