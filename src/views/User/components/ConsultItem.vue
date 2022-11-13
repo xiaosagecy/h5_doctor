@@ -26,28 +26,40 @@
             <van-button class="gray" plain size="small" round :loading="loading" @click="onCancelOrder(item)">
                 取消问诊
             </van-button>
-            <van-button type="primary" plain size="small" round :to="`/user/consult/${item.id}`">去支付</van-button>
+            <van-button type="primary" plain size="small" round :to="`/user/consult/${item.id}`">
+                去支付
+            </van-button>
         </div>
         <div class="foot" v-if="item.status === OrderType.ConsultWait">
             <van-button class="gray" plain size="small" round :loading="loading" @click="onCancelOrder(item)">
                 取消问诊
             </van-button>
-            <van-button type="primary" plain size="small" round :to="`/room?orderId=${item.id}`">继续沟通</van-button>
+            <van-button type="primary" plain size="small" round :to="`/room?orderId=${item.id}`">
+                继续沟通
+            </van-button>
         </div>
         <div class="foot" v-if="item.status === OrderType.ConsultChat">
-            <van-button class="gray" plain size="small" round v-if="item.prescriptionId">查看处方</van-button>
-            <van-button type="primary" plain size="small" round :to="`/room?orderId=${item.id}`">继续沟通</van-button>
+            <van-button @click="showPrescription(item.prescriptionId)" ass="gray" plain size="small" round
+                v-if="item.prescriptionId">
+                查看处方
+            </van-button>
+            <van-button type="primary" plain size="small" round :to="`/room?orderId=${item.id}`">
+                继续沟通
+            </van-button>
         </div>
         <div class="foot" v-if="item.status === OrderType.ConsultComplete">
-            <div class="more">
-                <!-- popover气泡弹出框 -->
-                <!-- 通过 actions 属性来定义菜单选项 -->
-                <!-- 当 Popover 弹出时，会基于 reference 插槽的内容进行定位。 -->
-                <!-- select	点击选项时触发 -->
-                <van-popover v-model:show="showPopover" :actions="actions" @select="onSelect" placement="top-start">
-                    <template #reference> 更多 </template>
-                </van-popover>
-            </div>
+            <!-- <div class="more">
+          <van-popover
+            v-model:show="showPopover"
+            :actions="actions"
+            @select="onSelect"
+            placement="top-start"
+          >
+            <template #reference> 更多 </template>
+          </van-popover>
+        </div> -->
+            <cp-consult-more :disabled="!item.prescriptionId" @on-delete="deleteConsulOrder(item)"
+                @on-preview="showPrescription(item.prescriptionId)"></cp-consult-more>
             <van-button class="gray" plain size="small" round :to="`/room?orderId=${item.id}`">
                 问诊记录
             </van-button>
@@ -67,32 +79,32 @@
 <script setup lang='ts'>
 import { OrderType } from '@/enums'
 import type { ConsultOrderItem } from '@/types/consult'
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import { cancelOrder, deleteOrder } from '@/services/consult'
 import { Toast } from 'vant'
 import { useShowPrescription } from '@/composable'
 
 
-const props = defineProps<{
+defineProps<{
     item: ConsultOrderItem
 }>()
 
-const showPopover = ref(false)
-const actions = computed(() => [
-    // prescriptionId 处方id信息
-    { text: '查看处方', disabled: !props.item.prescriptionId },
-    { text: '删除订单' }
-])
+// const showPopover = ref(false)
+// const actions = computed(() => [
+//     // prescriptionId 处方id信息
+//     { text: '查看处方', disabled: !props.item.prescriptionId },
+//     { text: '删除订单' }
+// ])
 
-const onSelect = (action: { text: string }, i: number) => {
-    // 点击选择
-    if (i === 1) {
-        deleteConsulOrder(props.item)
-    }
-    if( i===0 ) {
-        showPrescription(props.item.prescriptionId)
-    }
-}
+// const onSelect = (action: { text: string }, i: number) => {
+//     // 点击选择
+//     if (i === 1) {
+//         deleteConsulOrder(props.item)
+//     }
+//     if( i===0 ) {
+//         showPrescription(props.item.prescriptionId)
+//     }
+// }
 
 // 查看处方
 const { showPrescription } = useShowPrescription()
