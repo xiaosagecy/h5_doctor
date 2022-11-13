@@ -70,3 +70,8 @@ export const evaluateConsultOrder = (data: {
 // 问诊记录分页查询
 export const getConsultOrderList = (params: ConsultOrderParams) =>
     request<ConsultOrderPage>('patient/consult/order/list', 'get', params)
+
+// 取消订单
+export const cancelOrder = (id: string) => request(`patient/order/cancel/${id}`, 'put')
+
+
