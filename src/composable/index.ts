@@ -3,8 +3,9 @@
  */
 
 import { ref } from 'vue'
-import { followDoctor } from '@/services/consult'
+import { followDoctor, getPrescriptionPic } from '@/services/consult'
 import type { FollowType } from '@/types/consult'
+import { ImagePreview } from 'vant'
 
 // 封装逻辑 使用useXXX规范，表示使用某功能
 export const useFollow = (type: FollowType = 'doc') => {
@@ -20,4 +21,15 @@ export const useFollow = (type: FollowType = 'doc') => {
     }
     // 返回 加载loading 和关注的函数
     return { loading, follow }
+}
+
+export const useShowPrescription = () => {
+    // 查看处方
+    const showPrescription = async (id?: string) => {
+        if (id) {
+            const res = await getPrescriptionPic(id)
+            ImagePreview([res.data.url])
+        }
+    }
+    return { showPrescription }
 }

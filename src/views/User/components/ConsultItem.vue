@@ -70,6 +70,8 @@ import type { ConsultOrderItem } from '@/types/consult'
 import { ref, computed } from 'vue'
 import { cancelOrder, deleteOrder } from '@/services/consult'
 import { Toast } from 'vant'
+import { useShowPrescription } from '@/composable'
+
 
 const props = defineProps<{
     item: ConsultOrderItem
@@ -87,8 +89,14 @@ const onSelect = (action: { text: string }, i: number) => {
     if (i === 1) {
         deleteConsulOrder(props.item)
     }
-
+    if( i===0 ) {
+        showPrescription(props.item.prescriptionId)
+    }
 }
+
+// 查看处方
+const { showPrescription } = useShowPrescription()
+
 
 // 取消订单
 const loading = ref(false)

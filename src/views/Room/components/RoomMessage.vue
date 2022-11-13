@@ -115,9 +115,10 @@ import type { Image } from '@/types/consult'
 import { ImagePreview, Toast } from 'vant'
 import { useUserStore } from '@/stores'
 import dayis from 'dayjs'
-import { getPrescriptionPic } from '@/services/consult'
+// import { getPrescriptionPic } from '@/services/consult'
 import { useRouter } from 'vue-router'
 import EvaluateCard from './EvaluateCard.vue'
+import { useShowPrescription } from '@/composable'
 
 
 defineProps<{
@@ -151,12 +152,13 @@ const loadSuccess = (notScroll?: boolean) => {
 }
 
 // 查看处方
-const showPrescription = async (id?: string) => {
-  if (id) {
-    const res = await getPrescriptionPic(id)
-    ImagePreview([res.data.url])
-  }
-}
+// const showPrescription = async (id?: string) => {
+//   if (id) {
+//     const res = await getPrescriptionPic(id)
+//     ImagePreview([res.data.url])
+//   }
+// }
+const { showPrescription } = useShowPrescription()
 
 // 购买药物
 const router = useRouter()
