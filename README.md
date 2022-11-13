@@ -336,3 +336,16 @@ const consult = inject<Ref<ConsultOrderItem>>('consult')
 // 注入函数  --- 需要使用index.vue中的list数据（消息队列数据）
 const completeEva = inject<(score: number) => void>('completeEva')
 ```
+
+### beforeEnter钩子使用例子
+```ts
+{
+  path: '/room', 
+  component: () => import('@/views/Room/index.vue'), 
+  meta: { title: '问诊室' },
+  beforeEnter(to) {
+    // 进入路由前做一个支付结果判断
+    if (to.query.payResult === 'false') return '/user/consult'
+  }
+},
+```

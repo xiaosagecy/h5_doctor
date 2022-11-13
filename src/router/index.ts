@@ -30,7 +30,13 @@ const router = createRouter({
     { path: '/consult/dep', component: () => import('@/views/Consult/ConsultDep.vue'), meta: { title: '选择科室' } },
     { path: '/consult/illness', component: () => import('@/views/Consult/ConsultIllness.vue'), meta: { title: '病情描述' } },
     { path: '/consult/pay', component: () => import('@/views/Consult/ConsultPay.vue'), meta: { title: '问诊支付' } },
-    { path: '/room', component: () => import('@/views/Room/index.vue'), meta: { title: '问诊室' } },
+    {
+      path: '/room', component: () => import('@/views/Room/index.vue'), meta: { title: '问诊室' },
+      beforeEnter(to) {
+        // 进入路由前做一个支付结果判断
+        if (to.query.payResult === 'false') return '/user/consult'
+      }
+    },
     { path: '/user/consult', component: () => import('@/views/User/ConsultPage.vue'), meta: { title: '问诊记录' } }
   ]
 })
