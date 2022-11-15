@@ -58,7 +58,7 @@
             <template #reference> 更多 </template>
           </van-popover>
         </div> -->
-            <cp-consult-more :disabled="!item.prescriptionId" @on-delete="deleteConsulOrder(item)"
+            <cp-consult-more :disabled="!item.prescriptionId" @on-delete="deleteConsultOrder(item)"
                 @on-preview="showPrescription(item.prescriptionId)"></cp-consult-more>
             <van-button class="gray" plain size="small" round :to="`/room?orderId=${item.id}`">
                 问诊记录
@@ -69,7 +69,8 @@
             <van-button v-else class="gray" plain size="small" round> 查看评价 </van-button>
         </div>
         <div class="foot" v-if="item.status === OrderType.ConsultCancel">
-            <van-button class="gray" plain size="small" round :loading="deleteLoading" @click="deleteConsulOrder(item)">
+            <van-button class="gray" plain size="small" round :loading="deleteLoading"
+                @click="deleteConsultOrder(item)">
                 删除订单</van-button>
             <van-button type="primary" plain size="small" round to="/"> 咨询其他医生 </van-button>
         </div>
@@ -79,10 +80,7 @@
 <script setup lang='ts'>
 import { OrderType } from '@/enums'
 import type { ConsultOrderItem } from '@/types/consult'
-import { ref } from 'vue'
-import {  deleteOrder } from '@/services/consult'
-import { Toast } from 'vant'
-import { useShowPrescription, useCancelOrder } from '@/composable'
+import { useShowPrescription, useCancelOrder, useDeleteOrder } from '@/composable'
 
 
 defineProps<{
@@ -130,27 +128,32 @@ const { showPrescription } = useShowPrescription()
 /**
  * 使用hook里的取消
  */
-const {loading, onCancelOrder} = useCancelOrder()
+const { loading, onCancelOrder } = useCancelOrder()
 
 // 删除订单
 // 加载效果，API函数，点击调用
 const emit = defineEmits<{
     (e: 'on-delete', id: string): void
 }>()
-const deleteLoading = ref(false)
-const deleteConsulOrder = async (item: ConsultOrderItem) => {
-    deleteLoading.value = true
-    try {
-        await deleteOrder(item.id)
-        // 成功，通知父组件删除这条信息，提示
-        emit('on-delete', item.id)
-        Toast.success('删除成功')
-    } catch (e) {
-        Toast.fail('删除失败')
-    } finally {
-        deleteLoading.value = false
-    }
-}
+// const deleteLoading = ref(false)
+// const deleteConsulOrder = async (item: ConsultOrderItem) => {
+//     deleteLoading.value = true
+//     try {
+//         await deleteOrder(item.id)
+//         // 成功，通知父组件删除这条信息，提示
+//         emit('on-delete', item.id)
+//         Toast.success('删除成功')
+//     } catch (e) {
+//         Toast.fail('删除失败')
+//     } finally {
+//         deleteLoading.value = false
+//     }
+// }
+
+// 使用hook代替
+const { loading: deleteLoading, deleteConsultOrder } = useDeleteOrder((id) => {
+    emit('on-delete', id)
+})
 </script>
 
 <style lang="scss" scoped>

@@ -3,7 +3,7 @@
  */
 
 import { ref } from 'vue'
-import { cancelOrder, followDoctor, getPrescriptionPic } from '@/services/consult'
+import { followDoctor, getPrescriptionPic, cancelOrder, deleteOrder } from '@/services/consult'
 import type { ConsultOrderItem, FollowType } from '@/types/consult'
 import { ImagePreview, Toast } from 'vant'
 import { OrderType } from '@/enums'
@@ -53,4 +53,24 @@ export const useCancelOrder = () => {
         }
     }
     return { loading, onCancelOrder }
+}
+
+
+// 删除订单，删除成功做的事不确定，可以通过传入函数实现
+export const useDeleteOrder = (cb: (id: string) => void) => {
+    const loading = ref(false)
+    const deleteConsultOrder = async (item: ConsultOrderItem) => {
+        loading.value = true
+        try {
+            await deleteOrder(item.id)
+            // 成功，通知父组件删除这条信息，提示，详情就是跳转列表页面
+            Toast.success('删除成功')
+            cb && cb(item.id)
+        } catch (error) {
+            Toast.fail('删除失败')
+        } finally {
+            loading.value = false
+        }
+    }
+    return { loading, deleteConsultOrder }
 }
