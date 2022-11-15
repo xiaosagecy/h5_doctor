@@ -53,7 +53,8 @@
             </div>
         </van-action-sheet> -->
         <!-- 引入封装好的支付抽屉 -->
-        <cp-pay-sheet :actual-payment="payInfo.actualPayment" :orderId="orderId" v-model:show="show" :onClose="onClose">
+        <cp-pay-sheet :actual-payment="payInfo.actualPayment" :orderId="orderId"
+            pay-callback="http://localhost:5173/room" v-model:show="show" :onClose="onClose">
         </cp-pay-sheet>
     </div>
     <div class="consult-pay-page" v-else>

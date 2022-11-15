@@ -70,7 +70,7 @@
             <h3>快捷工具</h3>
             <!-- is-link 是否展示右侧箭头并开启点击反馈 -->
             <!-- border	是否显示内边框 -->
-            <van-cell v-for="(item,i) in tools" :key="i" :title="item.label" is-link :to="item.path" :border="false">
+            <van-cell v-for="(item, i) in tools" :key="i" :title="item.label" is-link :to="item.path" :border="false">
                 <template #icon>
                     <cp-icon name="1user-tool-0${i+1}"></cp-icon>
                 </template>
@@ -99,7 +99,7 @@ onMounted(async () => {
 const tools = [
     { label: '我的问诊', path: '/user/consult' },
     { label: '我的处方', path: '/' },
-    { label: '家庭档案', path: '/user/patients' },
+    { label: '家庭档案', path: '/user/patient' },
     { label: '地址管理', path: '/user/address' },
     { label: '我的评价', path: '/' },
     { label: '官方客服', path: '/' },

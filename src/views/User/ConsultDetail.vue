@@ -79,7 +79,8 @@
             <van-button type="primary" round to="/">咨询其他医生</van-button>
         </div>
         <!-- 支付抽屉 -->
-        <cp-pay-sheet :actual-payment="item.actualPayment" :order-id="item.id" v-model:show="show"></cp-pay-sheet>
+        <cp-pay-sheet :actual-payment="item.actualPayment" :order-id="item.id" v-model:show="show"
+            pay-callback="http://localhost:5173/room"></cp-pay-sheet>
     </div>
     <div class="consult-detail-page" v-else>
         <cp-nav-bar title="问诊详情" />
@@ -92,7 +93,7 @@
 import { OrderType } from '@/enums'
 import { getConsultOrderDetail } from '@/services/consult'
 import type { ConsultOrderItem } from '@/types/consult'
-import { onMounted, ref ,watch} from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { getIllnessTimeText, getConsultFlagText } from '@/utils/filter'
 import { useCancelOrder, useDeleteOrder, useShowPrescription } from '@/composable'
@@ -124,16 +125,16 @@ const { showPrescription } = useShowPrescription()
  * copied 是否拷贝成功，默认1.5s恢复状态
  * isSupported 浏览器是否支持，需要授权权读取粘贴板和写入粘贴板权限
  */
-const { copy,copied,isSupported } = useClipboard()
+const { copy, copied, isSupported } = useClipboard()
 // 2.点击复制按钮，复制订单编号
 const onCopy = () => {
-    if(!isSupported.value) return Toast('不支持，或未授权')
+    if (!isSupported.value) return Toast('不支持，或未授权')
     // 因为是详情页面，传过来的item已经这个包含了订单详情orderNo，直接使用即可
     copy(item.value?.orderNo as string)
 }
 // 3.复制后提示
-watch(copied,() => {
-    if(copied.value) Toast('已复制')
+watch(copied, () => {
+    if (copied.value) Toast('已复制')
 })
 
 const show = ref(false)
