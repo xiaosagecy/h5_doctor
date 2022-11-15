@@ -83,7 +83,7 @@ import type { ConsultOrderItem } from '@/types/consult'
 import { useShowPrescription, useCancelOrder, useDeleteOrder } from '@/composable'
 
 
-defineProps<{
+const props = defineProps<{
     item: ConsultOrderItem
 }>()
 
@@ -151,8 +151,8 @@ const emit = defineEmits<{
 // }
 
 // 使用hook代替
-const { loading: deleteLoading, deleteConsultOrder } = useDeleteOrder((id) => {
-    emit('on-delete', id)
+const { loading: deleteLoading, deleteConsultOrder } = useDeleteOrder(() => {
+    emit('on-delete', props.item.id)
 })
 </script>
 
