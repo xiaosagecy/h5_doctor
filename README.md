@@ -349,3 +349,33 @@ const completeEva = inject<(score: number) => void>('completeEva')
   }
 },
 ```
+
+### useClipboard复制API使用
+`项目中的使用参考`
+```
+1. copy(需要拷贝的内容)
+2. copied 是否拷贝成功，默认1.5s恢复状态 
+3. isSupported 浏览器是否支持，需要授权读取粘贴板和写入粘贴板权限
+```
+`复制订单号`使用场景
+```ts
+// 复制功能
+// 1.从vueuse得到数据和函数
+const { copy,copied,isSupported } = useClipboard()
+// 2.点击复制按钮，复制订单编号
+const onCopy = () => {
+    if(!isSupported.value) return Toast('不支持，或未授权')
+    // 因为是详情页面，传过来的item已经这个包含了订单详情orderNo，直接使用即可
+    copy(item.value?.orderNo as string)
+}
+// 3.复制后提示
+watch(copied,() => {
+    if(copied.value) Toast('已复制')
+})
+```
+
+参考文档地址：
+
+[](https://vueuse.org/core/useclipboard/)
+
+[useClipboard参考文档](https://vueuse.org/core/useclipboard/)
