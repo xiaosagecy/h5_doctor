@@ -25,7 +25,7 @@
         <van-submit-bar button-type="primary" :price="payInfo.actualPayment * 100" button-text="立即支付" text-align="left"
             @click="submit" :loading="loading" />
         <!--close-on-popstate 是否在页面回退时自动关闭 -->
-        <van-action-sheet v-model:show="show" title="选择支付方式" :closeable="false" :before-close="onClose"
+        <!-- <van-action-sheet v-model:show="show" title="选择支付方式" :closeable="false" :before-close="onClose"
             :close-on-popstate="false">
             <div class="pay-type">
                 <p class="amount">￥{{ payInfo.actualPayment.toFixed(2) }}</p>
@@ -51,12 +51,20 @@
                     <van-button type="primary" round block @click="pay">立即支付</van-button>
                 </div>
             </div>
-        </van-action-sheet>
+        </van-action-sheet> -->
+        <!-- 引入封装好的支付抽屉 -->
+        <cp-pay-sheet :actual-payment="payInfo.actualPayment" :orderId="orderId" v-model:show="show" :onClose="onClose">
+        </cp-pay-sheet>
+    </div>
+    <div class="consult-pay-page" v-else>
+        <van-skeleton title :row="4" />
+        <van-skeleton title :row="5" />
+        <van-skeleton title :row="3" />
     </div>
 </template>
 
 <script setup lang='ts'>
-import { getConsultOrderPre, createConsultOrder, getConsultOrderPayUrl } from '@/services/consult'
+import { getConsultOrderPre, createConsultOrder } from '@/services/consult'
 import { getPatientDetail } from '@/services/use'
 import { useConsultStore } from '@/stores'
 import type { ConsultOrderPreData } from '@/types/consult'
@@ -97,7 +105,6 @@ const agree = ref<boolean>(false)
 const show = ref<boolean>(false)
 const loading = ref<boolean>(false)
 const orderId = ref<string>('')
-const paymentMethod = ref<0 | 1>()
 const submit = async () => {
     if (!agree.value) return Toast('请勾选我已同意支付协议')
     loading.value = true
@@ -130,16 +137,16 @@ const onClose = () => {
 }
 
 // 跳转支付
-const pay = async () => {
-    if (paymentMethod.value === undefined) return Toast('请选择支付方式')
-    Toast.loading('跳转支付')
-    const res = await getConsultOrderPayUrl({
-        orderId: orderId.value,
-        paymentMethod: paymentMethod.value,
-        payCallback: 'http://localhost:5173/room'
-    })
-    window.location.href = res.data.payUrl
-}
+// const pay = async () => {
+//     if (paymentMethod.value === undefined) return Toast('请选择支付方式')
+//     Toast.loading('跳转支付')
+//     const res = await getConsultOrderPayUrl({
+//         orderId: orderId.value,
+//         paymentMethod: paymentMethod.value,
+//         payCallback: 'http://localhost:5173/room'
+//     })
+//     window.location.href = res.data.payUrl
+// }
 
 onMounted(() => {
     if (
