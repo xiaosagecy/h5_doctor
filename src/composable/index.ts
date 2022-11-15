@@ -2,11 +2,13 @@
  * 利用组合API，实现关注医生业务逻辑复用
  */
 
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { followDoctor, getPrescriptionPic, cancelOrder, deleteOrder } from '@/services/consult'
 import type { ConsultOrderItem, FollowType } from '@/types/consult'
 import { ImagePreview, Toast } from 'vant'
 import { OrderType } from '@/enums'
+import type { OrderDetail } from '@/types/order'
+import { getMedicalOrderDetail } from '@/services/order'
 
 // 封装逻辑 使用useXXX规范，表示使用某功能
 export const useFollow = (type: FollowType = 'doc') => {
@@ -72,4 +74,20 @@ export const useDeleteOrder = (cb: () => void) => {
         }
     }
     return { loading, deleteConsultOrder }
+}
+
+// 订单详情
+export const useOrderDetail = (id: string) => {
+    const order = ref<OrderDetail>()
+    const loading = ref(false)
+    onMounted(async () => {
+        try {
+            loading.value = true
+            const res = await getMedicalOrderDetail(id)
+            order.value = res.data
+        } finally {
+            loading.value = false
+        }
+    })
+    return { loading, order }
 }
